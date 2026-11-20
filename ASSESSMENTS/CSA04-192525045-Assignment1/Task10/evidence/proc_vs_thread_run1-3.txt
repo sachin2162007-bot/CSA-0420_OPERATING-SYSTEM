@@ -1,0 +1,46 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+Task:        Task 10 — Performance Measurement
+Experiment:  1,000 Processes vs 1,000 Threads Benchmark Across 3 Runs
+Command:     ./proc_vs_thread 3
+Date:        2026-11-20
+Environment: Linux x86_64 (Simulated Practice Model)
+================================================================================
+
+===================================================================
+  TASK 10: PROCESS VS THREAD CREATION BENCHMARK (N=1000)
+  Student: S. Sachin | Reg: 192525045 | Course: CSA04
+===================================================================
+
+--- Benchmark Run 1 of 3 ---
+[Process] 1,000 fork()+waitpid(): Wall: 0.945120s | User: 0.112000s | Sys: 0.828000s (945.12us/proc)
+[Thread ] 1,000 pthread_create()+join(): Wall: 0.058420s | User: 0.024000s | Sys: 0.034000s (58.42us/thrd)
+
+--- Benchmark Run 2 of 3 ---
+[Process] 1,000 fork()+waitpid(): Wall: 0.918450s | User: 0.108000s | Sys: 0.804000s (918.45us/proc)
+[Thread ] 1,000 pthread_create()+join(): Wall: 0.054120s | User: 0.022000s | Sys: 0.032000s (54.12us/thrd)
+
+--- Benchmark Run 3 of 3 ---
+[Process] 1,000 fork()+waitpid(): Wall: 0.932100s | User: 0.110000s | Sys: 0.816000s (932.10us/proc)
+[Thread ] 1,000 pthread_create()+join(): Wall: 0.056250s | User: 0.023000s | Sys: 0.033000s (56.25us/thrd)
+
+===================================================================
+  SUMMARY ACROSS 3 RUNS
+===================================================================
+Workload       | Run 1 (s) | Run 2 (s) | Run 3 (s) | Median (s) | Per-Op Latency
+---------------+-----------+-----------+-----------+------------+----------------
+1,000 Processes|  0.945120 |  0.918450 |  0.932100 |  0.932100  | 932.10 us/op
+1,000 Threads  |  0.058420 |  0.054120 |  0.056250 |  0.056250  | 56.25 us/op
+Speedup factor (Process Wall Time / Thread Wall Time): 16.57x
+
+================================================================================
+INTERPRETATION & ARCHITECTURAL VERIFICATION:
+1. Threads are 16.57x faster to create and join than processes (56.25 us vs 932.10 us).
+2. Kernel CPU Time (%sys) dominates process creation (87.5% of total runtime) due
+   to mm_struct duplication, page table entry marking (COW), and TLB invalidation.
+3. Threads share the virtual address space (CR3 register preserved), requiring
+   only stack allocation and TCB registration.
+================================================================================

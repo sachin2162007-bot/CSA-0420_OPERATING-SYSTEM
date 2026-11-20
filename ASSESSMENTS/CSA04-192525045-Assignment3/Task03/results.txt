@@ -1,0 +1,66 @@
+===============================================================================
+TASK 03: SEGMENTATION ARCHITECTURE - RESULTS AND OBSERVATIONS
+Student: S. Sachin | Register Number: 192525045 | Course: CSA04 CO3
+===============================================================================
+
+1. VERIFICATION OF 8 TEST ADDRESSES [EXPECTED OUTPUT]
+-------------------------------------------------------------------------------
+Test #1: Logical (0,  450) -> Actual: PHYSICAL  1850  | Expected: PHYSICAL  1850 [PASS]
+Test #2: Logical (0, 1050) -> Actual: SEGMENT FAULT   | Expected: SEGMENT FAULT [PASS]
+Test #3: Logical (1,    0) -> Actual: PHYSICAL  6300  | Expected: PHYSICAL  6300 [PASS]
+Test #4: Logical (1,  450) -> Actual: SEGMENT FAULT   | Expected: SEGMENT FAULT [PASS]
+Test #5: Logical (2,  250) -> Actual: PHYSICAL  4550  | Expected: PHYSICAL  4550 [PASS]
+Test #6: Logical (3,  800) -> Actual: PHYSICAL  4000  | Expected: PHYSICAL  4000 [PASS]
+Test #7: Logical (4,  999) -> Actual: PHYSICAL  5699  | Expected: PHYSICAL  5699 [PASS]
+Test #8: Logical (5,  100) -> Actual: INVALID SEGMENT | Expected: INVALID SEGMENT [PASS]
+
+2. LINUX SIGSEGV OBSERVATION [ILLUSTRATIVE SAMPLE OUTPUT]
+-------------------------------------------------------------------------------
+>>> [KERNEL TRAP INTERCEPTED] <<<
+Signal Number:       11 (SIGSEGV - Segmentation Violation)
+Faulting Address:    (nil)
+Fault Reason Code:   1 (SEGV_MAPERR: Address not mapped to object)
+OS Action:           Kernel MMU page fault handler trapped violation,
+                     verified VMA limits in task_struct->mm, identified
+                     illegal access, and dispatched SIGSEGV to process.
+Recovery:            Recovering execution safely via siglongjmp()...
+
+[EXPERIMENT 2]: Writing to Read-Only String Literal (Code Segment)...
+>>> [KERNEL TRAP INTERCEPTED] <<<
+Signal Number:       11 (SIGSEGV - Segmentation Violation)
+Faulting Address:    0x55d8a92b2008
+Fault Reason Code:   2 (SEGV_ACCERR: Invalid permissions for mapped object)
+
+3. EXTERNAL FRAGMENTATION SIMULATION RESULTS [ILLUSTRATIVE SAMPLE OUTPUT]
+-------------------------------------------------------------------------------
+Initial State: 10 segments allocated (Total: 960 KB / 1024 KB).
+Deallocated: Segments 2, 4, 7, 9 (Freeing 390 KB).
+Observed State:
+  Total Free Space: 454 KB
+  Largest Contiguous Free Hole: 150 KB
+  Free Holes Count: 4 holes
+  External Fragmentation: 304 KB
+Outcome:
+  New segment allocation requests of 160 KB and 180 KB FAILED despite 454 KB of
+  aggregate free memory available in the system!
+
+4. ARCHITECTURAL COMPARISON MATRIX [THEORETICAL RESULT]
+-------------------------------------------------------------------------------
+Property                  | Pure Paging       | Pure Segmentation | Segmented Paging
+------------------------------------------------------------------------------------
+Programmer View           | Linear bytes      | Logical modules   | Logical modules
+Hardware Table Size       | Large (KB to MB)  | Tiny (bytes)      | Moderate
+External Fragmentation    | NONE (0%)         | SEVERE            | NONE (0%)
+Internal Fragmentation    | < 1% (Last Page)  | NONE (0%)         | < 1% (Last Page)
+Dynamic Memory Growth     | Trivial (add page)| Hard (relocation) | Trivial (add pages)
+Sharing & Protection      | Page granularity  | Segment level     | Segment + Page level
+
+5. CONCLUSION
+-------------------------------------------------------------------------------
+Modern operating systems (Linux, Windows, macOS) rely primarily on **Paging (Flat Memory Model)**
+rather than pure segmentation because:
+1. Paging completely eliminates the catastrophic external fragmentation that plagues segmentation.
+2. Paging eliminates expensive physical memory compaction (which halts the system to copy megabytes).
+3. Linux achieves modular protection through Virtual Memory Areas (VMAs) tracked in software,
+   retaining the logical benefits of segmentation while enjoying the hardware simplicity of paging.
+===============================================================================

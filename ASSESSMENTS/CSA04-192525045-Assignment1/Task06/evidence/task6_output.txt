@@ -1,0 +1,36 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+Task:        Task 06 — Buffer Size Experiment
+Experiment:  Verification of Completed Code (TODO 1) on 10,000-byte File
+Command:     ./task6
+Date:        2026-11-20
+Environment: Linux x86_64 (Simulated Practice Model)
+================================================================================
+
+buffer    1 bytes: 10001 read() calls
+buffer  512 bytes:    21 read() calls
+buffer 4096 bytes:     4 read() calls
+
+================================================================================
+INTERPRETATION & MATHEMATICAL PROOF:
+File Size: n = 10,000 bytes. Formula: N_calls(b) = ceil(n / b) + 1 (for EOF read)
+
+1. Buffer size b = 1 byte:
+   N = ceil(10000 / 1) + 1 = 10,000 + 1 = 10,001 read() calls.
+   Every single character triggers a separate hardware trap (Ring 3 -> Ring 0).
+
+2. Buffer size b = 512 bytes:
+   19 reads * 512 bytes = 9,728 bytes
+    1 read  * 272 bytes =   272 bytes
+    1 terminating read  =     0 bytes (EOF)
+   N = 19 + 1 + 1 = 21 read() calls. Reduction factor: 476x fewer calls.
+
+3. Buffer size b = 4096 bytes:
+    2 reads * 4096 bytes = 8,192 bytes
+    1 read  * 1808 bytes = 1,808 bytes
+    1 terminating read   =     0 bytes (EOF)
+   N = 2 + 1 + 1 = 4 read() calls. Reduction factor: 2,500x fewer calls!
+================================================================================

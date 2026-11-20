@@ -1,0 +1,20 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 05 - Synchronisation
+EXPERIMENT: Readers-Writers Ticket Booking Simulation
+COMMAND: ./readers_writers
+DATE: 2026-11-20
+
+[READER 1] Inquired seat availability: 120 seats remaining
+[READER 2] Inquired seat availability: 120 seats remaining
+[READER 3] Inquired seat availability: 120 seats remaining
+  ===> [WRITER 1] Booked 2 tickets! Remaining seats: 118
+[READER 4] Inquired seat availability: 118 seats remaining
+[READER 5] Inquired seat availability: 118 seats remaining
+  ===> [WRITER 2] Booked 2 tickets! Remaining seats: 116
+  ===> [WRITER 1] Booked 2 tickets! Remaining seats: 114
+  ===> [WRITER 2] Booked 2 tickets! Remaining seats: 112
+Readers-Writers simulation complete. Final Seats: 112

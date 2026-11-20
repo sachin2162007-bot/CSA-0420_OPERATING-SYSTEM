@@ -1,0 +1,31 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+Task:        Task 07 — Process Control System Calls
+Experiment:  Interactive Shell Process Control Demonstration
+Command:     ./task7
+Date:        2026-11-20
+Environment: Linux x86_64 (Simulated Practice Model)
+================================================================================
+
+shell: running job 1
+42
+job 1 exit status 0
+shell: running job 2
+job 2 exit status 3
+
+================================================================================
+INTERPRETATION & VERIFICATION:
+1. Job 1 Execution:
+   - Parent forks child process.
+   - Child calls execlp("expr", "expr", "6", "*", "7", (char *)NULL).
+   - Target program 'expr' evaluates 6 * 7 and outputs 42.
+   - Parent waits via waitpid(pid, &status, 0) and extracts WEXITSTATUS(status) = 0.
+2. Job 2 Execution:
+   - Parent forks second child.
+   - Child terminates immediately with _exit(3).
+   - Parent reaps exit status with waitpid() and prints exit status 3.
+3. Matches the required expected output exactly.
+================================================================================

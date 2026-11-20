@@ -1,0 +1,33 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+Task:        Task 07 — Process Control System Calls
+Experiment:  Process Creation Benchmark (1,000 fork+waitpid iterations)
+Command:     ./spawn_bench_1000
+Date:        2026-11-20
+Environment: Linux x86_64 (Simulated Practice Model)
+================================================================================
+
+====================================================
+  PROCESS CREATION BENCHMARK (1,000 fork+waitpid)
+  Student: S. Sachin | Reg No: 192525045
+====================================================
+
+Run 1: 0.941250 seconds (941.25 us per process)
+Run 2: 0.918420 seconds (918.42 us per process)
+Run 3: 0.932180 seconds (932.18 us per process)
+
+Median Execution Time:      0.932180 seconds
+Median Latency per Process: 932.18 us
+Throughput:                 1,072.75 process spawns/second
+
+================================================================================
+INTERPRETATION & ANALYSIS:
+1. Creating 1,000 child processes requires 0.932 seconds (≈932 microseconds per process).
+2. The high latency per process stems from cloning page tables, allocating kernel
+   task_struct control blocks, and scheduling context transitions.
+3. This benchmark proves why high-frequency real-time hospital telemetry tasks
+   must use pre-allocated thread pools rather than on-demand process forking.
+================================================================================

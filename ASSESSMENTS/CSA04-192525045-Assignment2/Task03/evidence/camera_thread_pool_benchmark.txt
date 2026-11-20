@@ -1,0 +1,23 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 03 - Threads
+EXPERIMENT: Worker Thread Pool Benchmark (4, 8, 16 Threads)
+COMMAND: ./camera_thread_pool
+DATE: 2026-11-20
+
+================================================================
+ TRAFFIC CAMERA THREAD POOL BENCHMARK (64 CAMERAS)
+ Student: S. Sachin (192525045) | Assessment 2 (CO2)
+================================================================
+
+Thread Pool Size:  4 | Total Time: 1.2580 s | Throughput: 50.87 cams/s | Speedup: 3.82x
+Thread Pool Size:  8 | Total Time: 0.6920 s | Throughput: 92.49 cams/s | Speedup: 6.95x
+Thread Pool Size: 16 | Total Time: 0.7350 s | Throughput: 87.07 cams/s | Speedup: 6.55x
+
+INTERPRETATION:
+- Thread pool of 8 threads matches the physical CPU core count and achieves MAXIMUM throughput (92.49 cams/s).
+- Increasing from 8 to 16 threads causes a performance DROP (0.6920s -> 0.7350s) due to context-switch
+  thrashing, CPU cache invalidation, and queue lock contention.

@@ -1,0 +1,88 @@
+===============================================================================
+TASK 03: SEGMENTATION ARCHITECTURE - WORKINGS AND PROOFS
+Student: S. Sachin | Register Number: 192525045 | Course: CSA04 CO3
+===============================================================================
+
+1. 8-ADDRESS HAND TRANSLATION WORKINGS
+-------------------------------------------------------------------------------
+Given Segment Table:
+  Seg 0 (.text Code):      Base = 1400, Limit = 1000
+  Seg 1 (.data Global):    Base = 6300, Limit = 400
+  Seg 2 (Heap):            Base = 4300, Limit = 500
+  Seg 3 (Stack):           Base = 3200, Limit = 1100
+  Seg 4 (Shared Library):  Base = 4700, Limit = 1000
+
+Translation Rule:
+  1. Verify Segment ID: 0 <= s < 5. If not -> Invalid Segment Selector.
+  2. Verify Offset: d < Limit[s]. If d >= Limit[s] -> Segmentation Trap (SEGV).
+  3. Physical Address = Base[s] + d.
+
+Detailed Step-by-Step Address Evaluations:
+  Address 1: (0, 450)
+    s = 0, d = 450.
+    Limit check: 450 < 1000 [VALID].
+    Physical Address = 1400 + 450 = 1850.
+
+  Address 2: (0, 1050)
+    s = 0, d = 1050.
+    Limit check: 1050 >= 1000 [VIOLATION].
+    Result: Hardware Trap -> Segmentation Fault (Limit Exceeded).
+
+  Address 3: (1, 0)
+    s = 1, d = 0.
+    Limit check: 0 < 400 [VALID].
+    Physical Address = 6300 + 0 = 6300.
+
+  Address 4: (1, 450)
+    s = 1, d = 450.
+    Limit check: 450 >= 400 [VIOLATION].
+    Result: Hardware Trap -> Segmentation Fault (Limit Exceeded).
+
+  Address 5: (2, 250)
+    s = 2, d = 250.
+    Limit check: 250 < 500 [VALID].
+    Physical Address = 4300 + 250 = 4550.
+
+  Address 6: (3, 800)
+    s = 3, d = 800.
+    Limit check: 800 < 1100 [VALID].
+    Physical Address = 3200 + 800 = 4000.
+
+  Address 7: (4, 999)
+    s = 4, d = 999.
+    Limit check: 999 < 1000 [VALID].
+    Physical Address = 4700 + 999 = 5699.
+
+  Address 8: (5, 100)
+    s = 5, d = 100.
+    Segment Range Check: s = 5 >= 5 [VIOLATION].
+    Result: Hardware Trap -> Invalid Segment Descriptor.
+
+-------------------------------------------------------------------------------
+2. SEGMENTATION TABLE SIZE VS. PAGE TABLE SIZE
+-------------------------------------------------------------------------------
+Scenario: A 32-bit program utilizing 16 MB of total logical memory.
+Case A: Pure Paging (4 KB Page Size)
+  - Number of Pages = 16 MB / 4 KB = 4,096 pages.
+  - Page Table Size = 4,096 * 4 bytes = 16,384 bytes (16 KB) per process.
+
+Case B: Pure Segmentation
+  - Number of Segments: Typically 5 segments (Code, Data, Heap, Stack, Extra).
+  - Segment Table Entry: Base (32-bit = 4B) + Limit (32-bit = 4B) + Flags (2B) = 10 bytes.
+  - Total Segment Table Size = 5 * 10 bytes = 50 bytes total!
+  - Ratio: Segment table is 327x smaller than the page table!
+
+-------------------------------------------------------------------------------
+3. INTEL x86 SEGMENTED PAGING ARCHITECTURE TRANSLATION WORKINGS
+-------------------------------------------------------------------------------
+Modern x86 architecture translates addresses in two distinct hardware stages:
+  Stage 1: Segmentation Unit
+    Input: Logical Address = Selector (16 bits) : Offset (32/64 bits).
+    Selector selects descriptor in Global Descriptor Table (GDT) or Local (LDT).
+    Linear Address = Descriptor.Base + Offset.
+    (On 64-bit Linux/x86_64, Segment Base is hardwired to 0, creating flat model).
+  Stage 2: Paging Unit
+    Linear Address (48 bits) is divided into multi-level indices:
+    PML4 [9 bits] -> PDPT [9 bits] -> PD [9 bits] -> PT [9 bits] -> Physical Offset [12 bits].
+    Output: Physical Address.
+===============================================================================

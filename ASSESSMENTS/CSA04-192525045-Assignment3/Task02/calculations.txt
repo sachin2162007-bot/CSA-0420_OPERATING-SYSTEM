@@ -1,0 +1,125 @@
+===============================================================================
+TASK 02: PAGING ARCHITECTURE - MATHEMATICAL CALCULATIONS AND PROOFS
+Student: S. Sachin | Register Number: 192525045 | Course: CSA04 CO3
+===============================================================================
+
+1. OFFICIAL LOGICAL-TO-PHYSICAL TRANSLATION (PAGE_SIZE = 1024, PAGES = 8)
+-------------------------------------------------------------------------------
+Given:
+  Page Table: {Page 0: 5, Page 1: 2, Page 2: -1, Page 3: 7, Page 4: 0, Page 5: -1, Page 6: 3, Page 7: -1}
+  Offset bits d = log2(1024) = 10 bits.
+  Offset mask = 1024 - 1 = 1023 (0x3FF).
+
+Logical Address Calculations:
+  1. Address 0:
+     p = 0 / 1024 = 0, d = 0 % 1024 = 0.
+     page_table[0] = 5 (Valid Frame).
+     Physical Address = (5 * 1024) + 0 = 5120 + 0 = 5120.
+  
+  2. Address 1500:
+     p = 1500 / 1024 = 1, d = 1500 % 1024 = 476.
+     page_table[1] = 2 (Valid Frame).
+     Physical Address = (2 * 1024) + 476 = 2048 + 476 = 2524.
+
+  3. Address 3100:
+     p = 3100 / 1024 = 3, d = 3100 % 1024 = 28.
+     page_table[3] = 7 (Valid Frame).
+     Physical Address = (7 * 1024) + 28 = 7168 + 28 = 7196.
+
+  4. Address 6200:
+     p = 6200 / 1024 = 6, d = 6200 % 1024 = 56.
+     page_table[6] = 3 (Valid Frame).
+     Physical Address = (3 * 1024) + 56 = 3072 + 56 = 3128.
+
+  5. Address 9000:
+     p = 9000 / 1024 = 8, d = 9000 % 1024 = 808.
+     Condition: p = 8 >= PAGES (8). Page index is out of bounds.
+     Result: "invalid address" (Segmentation Violation).
+
+  6. Address 2049:
+     p = 2049 / 1024 = 2, d = 2049 % 1024 = 1.
+     page_table[2] = -1 (Invalid / Present Bit = 0).
+     Result: "page fault" (Trap to Kernel Demand Paging Handler).
+
+-------------------------------------------------------------------------------
+2. HAND RECALCULATION WITH PAGE_SIZE = 2048 (PAGES = 8)
+-------------------------------------------------------------------------------
+Given:
+  Page Table: {5, 2, -1, 7, 0, -1, 3, -1}
+  Offset bits = log2(2048) = 11 bits. Max offset = 2047.
+  Virtual address space = 8 * 2048 = 16,384 bytes.
+
+Calculations:
+  1. Address 0:    p = 0/2048 = 0,    d = 0.    Frame 5 -> (5 * 2048) + 0    = 10240.
+  2. Address 1500: p = 1500/2048 = 0, d = 1500. Frame 5 -> (5 * 2048) + 1500 = 11740.
+  3. Address 3100: p = 3100/2048 = 1, d = 1052. Frame 2 -> (2 * 2048) + 1052 = 5148.
+  4. Address 6200: p = 6200/2048 = 3, d = 56.   Frame 7 -> (7 * 2048) + 56   = 14392.
+  5. Address 9000: p = 9000/2048 = 4, d = 808.  Frame 0 -> (0 * 2048) + 808  = 808.
+  6. Address 2049: p = 2049/2048 = 1, d = 1.    Frame 2 -> (2 * 2048) + 1    = 4097.
+Observation:
+  With PAGE_SIZE = 2048, all 6 addresses map to pages 0, 1, 3, 4 which are ALL valid
+  frames in memory! Neither invalid address nor page faults occur for these test vectors.
+
+-------------------------------------------------------------------------------
+3. 32-BIT AND 48-BIT PAGE TABLE SIZES (4 KB Page Size)
+-------------------------------------------------------------------------------
+Case A: 32-bit Architecture
+- Address Space = 2^32 bytes = 4 GB.
+- Page Size = 4 KB = 2^12 bytes. Offset = 12 bits.
+- Number of Pages = 2^32 / 2^12 = 2^20 = 1,048,576 pages.
+- Page Table Entry (PTE) = 4 bytes (32 bits).
+- Flat Page Table Size = 2^20 * 4 bytes = 4,194,304 bytes = 4 MB per process.
+- For 100 concurrent student processes: 100 * 4 MB = 400 MB RAM dedicated to page tables.
+
+Case B: 48-bit Architecture (x86_64 Canonical)
+- Address Space = 2^48 bytes = 256 Terabytes (TB).
+- Page Size = 4 KB = 2^12 bytes. Offset = 12 bits.
+- Number of Pages = 2^48 / 2^12 = 2^36 = 68,719,476,736 pages.
+- PTE Size = 8 bytes (64 bits).
+- Flat Page Table Size = 2^36 * 8 bytes = 2^39 bytes = 512 Gigabytes (GB) per process!
+- Mathematical Conclusion: A single flat page table is physically impossible.
+- Solution: 4-Level Paging (PML4 -> PDPT -> PD -> PT).
+  Each level consumes 9 bits (2^9 = 512 entries * 8 bytes = 4,096 bytes = exactly 1 page).
+  9 + 9 + 9 + 9 + 12 (offset) = 48 bits total.
+  Sparse allocation ensures only populated sub-trees exist in memory.
+
+-------------------------------------------------------------------------------
+4. TLB EFFECTIVE ACCESS TIME (EAT) DERIVATIONS
+-------------------------------------------------------------------------------
+Formula:
+  EAT = alpha * (t_tlb + t_mem) + (1 - alpha) * (t_tlb + (levels + 1) * t_mem)
+Given:
+  t_tlb = 10 ns, t_mem = 100 ns.
+  levels = 4 (for modern 64-bit multi-level paging).
+
+Calculations:
+- No TLB Baseline:
+  EAT_no_tlb = (4 + 1) * 100 ns = 500.0 ns.
+
+- Hit Ratio alpha = 80% (0.80):
+  EAT = 0.80 * (10 + 100) + 0.20 * (10 + 500)
+      = 0.80 * 110 + 0.20 * 510 = 88.0 + 102.0 = 190.0 ns.
+  Speedup over no-TLB = 500 / 190.0 = 2.63x.
+
+- Hit Ratio alpha = 95% (0.95):
+  EAT = 0.95 * 110 + 0.05 * 510 = 104.5 + 25.5 = 130.0 ns.
+  Speedup over no-TLB = 500 / 130.0 = 3.85x.
+
+- Hit Ratio alpha = 99% (0.99):
+  EAT = 0.99 * 110 + 0.01 * 510 = 108.9 + 5.1 = 114.0 ns.
+  Speedup over no-TLB = 500 / 114.0 = 4.39x.
+
+-------------------------------------------------------------------------------
+5. INVERTED PAGE TABLE (IPT) SPACE COMPLEXITY
+-------------------------------------------------------------------------------
+Parameters:
+  Physical RAM = 16 GB = 2^34 bytes.
+  Page Size = 4 KB = 2^12 bytes.
+  Number of Frames = 2^34 / 2^12 = 2^22 = 4,194,304 frames.
+  IPT Entry = 16 bytes (PID [4B], Page# [6B], Control bits [2B], Chain Ptr [4B]).
+  Total System Table Size = 2^22 * 16 bytes = 67,108,864 bytes = 64 MB total.
+Comparison:
+  For 100 processes on a 48-bit system:
+  - Multi-level Paging: ~16 KB to 1 MB per process = ~50 MB.
+  - Inverted Table: Fixed 64 MB regardless of how many processes exist!
+===============================================================================

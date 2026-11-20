@@ -1,0 +1,83 @@
+# ==============================================================================
+# Course: CSA04 - Operating Systems (CO4)
+# Student: S. Sachin (192525045) - SIMATS Engineering
+# Assignment: Assessment 4 - Task 05 Distributed Storage Configuration
+# File: storage_architecture.yaml
+# Description: Production Ceph Cluster Architecture Manifest for 5-Campus University
+# ==============================================================================
+
+cluster_topology:
+  cluster_name: "simats-unified-storage"
+  fsid: "8c7d6e5a-4b3c-2a1f-0e9d-8c7b6a5d4e3f"
+  campuses:
+    - name: "Campus_A_Main"
+      role: "Primary_Datacenter"
+      monitors: ["mon-a1.simats.edu", "mon-a2.simats.edu"]
+      osd_nodes: 12
+      capacity_tb: 480
+    - name: "Campus_B_Engg"
+      role: "Secondary_Datacenter"
+      monitors: ["mon-b1.simats.edu"]
+      osd_nodes: 8
+      capacity_tb: 320
+    - name: "Campus_C_Tech"
+      role: "Secondary_Datacenter"
+      monitors: ["mon-c1.simats.edu"]
+      osd_nodes: 8
+      capacity_tb: 320
+    - name: "Campus_D_Health"
+      role: "Edge_Gateway"
+      caching_nodes: 2
+      local_ssd_cache_tb: 32
+    - name: "Campus_E_Management"
+      role: "Edge_Gateway"
+      caching_nodes: 2
+      local_ssd_cache_tb: 32
+
+crush_rulesets:
+  - name: "three_campus_replicated_rule"
+    pool_type: "replicated"
+    min_size: 2
+    max_size: 3
+    failure_domain: "campus"
+    steps:
+      - "take default"
+      - "chooseleaf firstn 3 type campus"
+      - "emit"
+
+  - name: "video_streaming_erasure_coded_rule"
+    pool_type: "erasure_coded"
+    profile: "k8_m4_multicampus"
+    k: 8
+    m: 4
+    coding_chunk_size_kb: 4096
+    failure_domain: "host"
+
+storage_pools:
+  - name: "student_home_dirs"
+    type: "CephFS_Data"
+    crush_rule: "three_campus_replicated_rule"
+    replication_factor: 3
+    pg_num: 1024
+    quota_per_user_gb: 15
+
+  - name: "video_lecture_library"
+    type: "Ceph_RGW_S3"
+    crush_rule: "video_streaming_erasure_coded_rule"
+    pg_num: 2048
+    cache_tier:
+      enabled: true
+      tier_type: "writeback"
+      pool_target: "nvme_hot_cache"
+      target_max_bytes: 10995116277760 # 10 TB NVMe Pool
+
+network_configuration:
+  public_network: "10.100.0.0/16" # Intra-campus client traffic
+  cluster_network: "10.200.0.0/16" # Dedicated 40GbE inter-node replication traffic
+  wan_interconnect: "10Gbps Dedicated Dark Fiber Ring with BGP Anycast Routing"
+
+integrity_and_scrubbing:
+  deep_scrub_interval_seconds: 604800 # Weekly
+  checksum_algorithm: "crc32c"
+  auto_repair_enabled: true
+  min_smart_reallocated_sectors_alarm: 5

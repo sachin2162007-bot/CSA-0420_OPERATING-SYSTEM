@@ -1,0 +1,32 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 05 - Synchronisation
+EXPERIMENT: Binary vs Counting Semaphore Reservation Demo
+COMMAND: ./semaphore_demo
+DATE: 2026-11-20
+
+Railway Booking Semaphore Demonstration (10 Agents, 50 Seats)
+[Agent  1] Connected to booking server (counting sem slot acquired)
+  -> [Agent  1] Booked seat #1! Remaining seats: 49
+[Agent  2] Connected to booking server (counting sem slot acquired)
+  -> [Agent  2] Booked seat #2! Remaining seats: 48
+[Agent  3] Connected to booking server (counting sem slot acquired)
+  -> [Agent  3] Booked seat #3! Remaining seats: 47
+[Agent  4] Connected to booking server (counting sem slot acquired)
+  -> [Agent  4] Booked seat #4! Remaining seats: 46
+[Agent  5] Connected to booking server (counting sem slot acquired)
+  -> [Agent  5] Booked seat #5! Remaining seats: 45
+[Agent  6] Connected to booking server (counting sem slot acquired)
+  -> [Agent  6] Booked seat #6! Remaining seats: 44
+[Agent  7] Connected to booking server (counting sem slot acquired)
+  -> [Agent  7] Booked seat #7! Remaining seats: 43
+[Agent  8] Connected to booking server (counting sem slot acquired)
+  -> [Agent  8] Booked seat #8! Remaining seats: 42
+[Agent  9] Connected to booking server (counting sem slot acquired)
+  -> [Agent  9] Booked seat #9! Remaining seats: 41
+[Agent 10] Connected to booking server (counting sem slot acquired)
+  -> [Agent 10] Booked seat #10! Remaining seats: 40
+All agents finished. Final Available Seats: 40 (Expected: 40)

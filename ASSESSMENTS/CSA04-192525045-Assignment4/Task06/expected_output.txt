@@ -1,0 +1,22 @@
+===============================================================================
+TASK 06: VIDEO STREAMING STORAGE ARCHITECTURE SIMULATOR
+Workload: 25000 Concurrent Streams @ 4.0 Mbps (Peak: 100.0 Gbps / 12.5 GB/s)
+===============================================================================
+
+Metric                              | Design A: All-HDD  | Design B: Hybrid  
+-------------------------------------------------------------------------------
+Throughput Demanded (Gbps)          |             100.00 |             100.00
+Throughput Delivered (Gbps)         |              12.48 |             100.00
+Chunk IOPS Demanded                 |               3125 |               3125
+Chunk IOPS Delivered                |               3125 |               3125
+Average Chunk Latency (ms)          |              57.66 |               0.68
+Streams Admitted                    |               3120 |              25000
+Streams Dropped / Starved           |              21880 |                  0
+Stream Failure Rate (%)             |              87.5% |               0.0%
+-------------------------------------------------------------------------------
+
+ARCHITECTURAL VERDICT:
+  Design A (All-HDD) fails catastrophically under 25,000 streams (87.5% stream drop)
+  due to mechanical head seek thrashing and throughput bottleneck.
+  Design B (Hybrid NVMe + HDD) absorbs 95% of requests in Tier 0, delivering 100 Gbps
+  with 0% stream drop and sub-millisecond response latency.

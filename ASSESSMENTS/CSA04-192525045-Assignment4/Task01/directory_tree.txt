@@ -1,0 +1,49 @@
+/college/
+├── administration/
+│   ├── faculty/
+│   └── registrar/
+├── departments/
+│   └── aiml/
+│       ├── batch_2023/
+│       │   └── semester_4/
+│       │       ├── courses/
+│       │       │   └── csa04_os/
+│       │       │       ├── syllabus.pdf
+│       │       │       ├── assignments/
+│       │       │       │   ├── assignment1/
+│       │       │       │   ├── assignment2/
+│       │       │       │   ├── assignment3/
+│       │       │       │   └── assignment4/
+│       │       │       └── lecture_slides/
+│       │       └── students/
+│       │           ├── 192525045_sachin/
+│       │           │   ├── profile.json
+│       │           │   ├── assignments/
+│       │           │   │   ├── csa04_os/
+│       │           │   │   │   ├── task1_review.md
+│       │           │   │   │   ├── task2_allocation.c
+│       │           │   │   │   └── task4_scheduling.c
+│       │           │   │   └── csa05_dbms/
+│       │           │   ├── projects/
+│       │           │   │   └── team_hydra_project/ -> /college/shared/projects/2026_aiml_p04/
+│       │           │   └── documents/
+│       │           │       ├── resume.pdf
+│       │           │       └── certifications/
+│       │           └── 192525046_ananya/
+│       │               ├── assignments/
+│       │               ├── projects/
+│       │               └── documents/
+│       └── shared/
+│           └── templates/
+└── shared/
+    ├── common_datasets/
+    │   └── mnist.tar.gz
+    └── projects/
+        └── 2026_aiml_p04/
+            ├── project_metadata.yaml
+            ├── src/
+            │   ├── main.py
+            │   └── utils.py
+            ├── docs/
+            │   └── specification.md
+            └── logs/

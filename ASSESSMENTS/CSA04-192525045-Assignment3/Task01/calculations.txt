@@ -1,0 +1,80 @@
+===============================================================================
+TASK 01: LINKING, LOADING AND ADDRESS BINDING - MATHEMATICAL CALCULATIONS
+Student: S. Sachin | Register Number: 192525045 | Course: CSA04 CO3
+===============================================================================
+
+1. PROBLEM SCENARIO: BANK BRANCH APPLICATION UPDATES
+-------------------------------------------------------------------------------
+Context:
+- A banking enterprise operates N = 500 branch offices across a statewide WAN.
+- Each branch workstation runs the core branch banking client.
+- When an urgent security vulnerability (e.g. CVE cryptographic weakness) is
+  discovered, a software patch must be distributed to every branch office.
+
+Parameters:
+- Number of branch offices (N): 500 branches
+- Typical WAN bandwidth per branch link (B): 10 Mbps (effective throughput: 1.25 MB/s)
+- Size of statically linked monolithic application (S_static): 200 MB (204,800 KB)
+- Size of dynamic shared cryptographic library (S_shared): 2 MB (2,048 KB)
+- Core application executable size when dynamically linked: 15 MB (15,360 KB)
+
+2. BANDWIDTH CONSUMPTION CALCULATIONS
+-------------------------------------------------------------------------------
+Case A: Static Linking (Monolithic Binary Replacement)
+- Distribution payload per branch = S_static = 200 MB
+- Total Network Data Transferred = N * S_static
+  Total Data = 500 * 200 MB = 100,000 MB = 97.66 GB (approx 100 GB)
+- Minimum download time per branch over 10 Mbps WAN link:
+  T_download = 200 MB / 1.25 MB/s = 160.0 seconds (2.67 minutes per branch)
+- Total WAN bandwidth cost = 100 GB transmission volume.
+
+Case B: Dynamic Linking (Shared Library Patch Only)
+- Distribution payload per branch = S_shared = 2 MB
+- Total Network Data Transferred = N * S_shared
+  Total Data = 500 * 2 MB = 1,000 MB = 0.976 GB (approx 1 GB)
+- Minimum download time per branch over 10 Mbps WAN link:
+  T_download = 2 MB / 1.25 MB/s = 1.60 seconds
+- Total WAN bandwidth cost = 1 GB transmission volume.
+
+Bandwidth Reduction Ratio:
+  Bandwidth Savings = (1 - (Total_Shared / Total_Static)) * 100%
+  Bandwidth Savings = (1 - (1,000 MB / 100,000 MB)) * 100% = 99.0% Reduction!
+
+3. PHYSICAL RAM OCCUPANCY ACROSS MULTI-USER WORKSTATIONS
+-------------------------------------------------------------------------------
+Scenario:
+- An enterprise multi-user branch server executes M = 50 concurrent banking teller sessions.
+- In static linking, each process receives a private, duplicated copy of the
+  entire 200 MB text, data, and library segments in its virtual address space.
+  Note: While Linux pages text from disk on demand, private static linking
+  precludes cross-process deduplication across distinct binaries.
+- Total memory for static binaries:
+  RAM_static = M * Size_binary = 50 * 200 MB = 10,000 MB (9.76 GB RAM)
+
+- In dynamic linking, the Operating System's Virtual Memory Manager (VMM) maps
+  the read-only executable code segment (.text) of `libcrypto_demo.so` into
+  physical memory ONCE. All 50 processes share the same physical frames.
+  Each process only allocates private pages for its writable data segment (.data/.bss).
+- Let Library Text Segment = 1.8 MB (shared), Data Segment = 0.2 MB (private):
+  RAM_shared = (1 * 1.8 MB [shared once]) + (50 * 0.2 MB [private data])
+             = 1.8 MB + 10.0 MB = 11.8 MB RAM
+- Memory Savings Factor for Library Code:
+  Static Library Footprint = 50 * 2.0 MB = 100.0 MB
+  Dynamic Library Footprint = 11.8 MB
+  Memory Savings = 88.2% RAM reduction for shared libraries across 50 sessions.
+
+4. STARTUP LATENCY & ADDRESS BINDING TIME TRADEOFF
+-------------------------------------------------------------------------------
+- Compile-time Binding:
+  * Symbol resolution performed offline by `ld`.
+  * Runtime startup delay: T_exec = T_load_binary = approx 1.2 ms (execve overhead).
+- Load-time Dynamic Binding:
+  * Dynamic linker (`/lib64/ld-linux-x86-64.so.2`) traverses ELF `.dynamic` section.
+  * Relocations parsed and resolved across GOT (Global Offset Table) and PLT (Procedure Linkage Table).
+  * Startup delay: T_exec = T_load_binary + T_resolve_libraries
+  * With 10 shared libraries: approx 3.8 ms to 6.5 ms.
+- Runtime Binding (dlopen):
+  * Initial startup delay: T_initial = 1.1 ms (no crypto resolution at launch).
+  * Deferred delay on transaction invocation: T_dlopen = approx 0.8 ms to map ELF and parse dynsym.
+  * Memory overhead when idle: 0 KB (library unmapped).
+===============================================================================

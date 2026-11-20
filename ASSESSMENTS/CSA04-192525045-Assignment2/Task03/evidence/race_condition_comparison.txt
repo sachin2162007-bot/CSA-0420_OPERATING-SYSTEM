@@ -1,0 +1,25 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 03 - Threads
+EXPERIMENT: Shared Counter Race Condition Demonstration
+COMMAND: ./race_condition_demo
+DATE: 2026-11-20
+
+================================================================
+ RACE CONDITION DEMONSTRATION: 4 THREADS x 500000 ITERATIONS
+ Expected Final Value:  2000000
+ Unprotected Counter:   1248930 (Lost Updates: 751070, 37.55% error)
+ Mutex-Protected Value: 2000000 (Lost Updates: 0, 100% correct)
+================================================================
+
+INTERPRETATION:
+- Unprotected global increment demonstrates severe data corruption (37.55% lost updates)
+  because counter++ compiles to three distinct x86_64 assembly instructions:
+    1. movq (%rax), %rcx      (LOAD)
+    2. incq %rcx              (ADD)
+    3. movq %rcx, (%rax)      (STORE)
+  An interrupt or preemptive context switch occurring between LOAD and STORE causes lost writes.
+- POSIX pthread_mutex_t guarantees atomic execution and 100% computational correctness.

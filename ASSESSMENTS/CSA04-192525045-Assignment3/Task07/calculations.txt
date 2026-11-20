@@ -1,0 +1,71 @@
+===============================================================================
+TASK 07: MEMORY MANAGEMENT PLAN - MATHEMATICAL WORKINGS AND PROOFS
+Student: S. Sachin | Register Number: 192525045 | Course: CSA04 CO3
+===============================================================================
+
+1. SMART FACTORY SYSTEM MEMORY BUDGET CALCULATIONS
+-------------------------------------------------------------------------------
+Hardware Parameters:
+  Total Installed Physical RAM: 2,048 MB (2.0 GB)
+  Swap Disk Capacity: 0 MB (Disabled)
+  Operating System Kernel Budget: 128 MB (Kernel text, page tables, slab cache)
+  Total Usable User Space RAM: 2,048 - 128 = 1,920 MB
+
+Task Memory Demands:
+  Task 1 (Real-Time Control):    100 MB (Hard Real-Time, mlock pinned)
+  Task 2 (Machine Learning):   1,536 MB (1.5 GB, inference model weights & buffers)
+  Task 3 (System Logging):        50 MB (Ring buffer telemetry logs)
+  Task 4 (Proposed Future):      500 MB (Batch analytics pipeline)
+
+-------------------------------------------------------------------------------
+2. BASELINE 3-TASK FEASIBILITY PROOF
+-------------------------------------------------------------------------------
+Sum of Baseline Demands:
+  Demand_base = OS_reserved + RT_control + ML_task + Logging
+              = 128 MB + 100 MB + 1,536 MB + 50 MB
+              = 1,814 MB
+
+Margin Calculation:
+  Free Headroom = Total_RAM - Demand_base
+                = 2,048 MB - 1,814 MB = +234 MB Free Headroom
+
+Conclusion:
+  The baseline 3-task deployment is 100% mathematically FEASIBLE and STABLE.
+  The Real-Time task can lock its entire 100 MB footprint into physical RAM
+  without depriving the ML or Logging tasks of their necessary resident memory.
+
+-------------------------------------------------------------------------------
+3. FOURTH TASK OVERCOMMIT COLLAPSE PROOF
+-------------------------------------------------------------------------------
+Sum of Extended Demands with Fourth Task:
+  Demand_4tasks = Demand_base + Task_4
+                = 1,814 MB + 500 MB = 2,314 MB
+
+Memory Deficit:
+  Deficit = Demand_4tasks - Total_RAM
+          = 2,314 MB - 2,048 MB = +266 MB (13.0% over physical capacity!)
+
+Mathematical Proof of Failure on Zero-Swap Edge Device:
+  Let M_avail be available unpinned physical frames = 2,048 - (128 + 100) = 1,820 MB.
+  Demand for unpinned memory = ML (1,536) + Log (50) + Task 4 (500) = 2,086 MB.
+  Deficit = 2,086 MB - 1,820 MB = 266 MB.
+  Because Swap = 0, no anonymous page can be paged out to disk.
+  Allocating 2,086 MB will cause Linux kernel memory exhaustion:
+    1. brk() / mmap() fails with ENOMEM (if overcommit is disabled).
+    2. If overcommit is enabled (default), page fault handler cannot allocate frame:
+       Kernel invokes out_of_memory() in mm/oom_kill.c.
+       Process with highest badness score (the 1.5 GB ML process) is sent SIGKILL!
+
+-------------------------------------------------------------------------------
+4. OPTIMAL MITIGATION BUDGET WITH INT8 MODEL QUANTIZATION
+-------------------------------------------------------------------------------
+Refactoring ML Model from FP32 (32-bit floats) to INT8 (8-bit integers):
+  Model Weight Compression Ratio = 4:1
+  Model Weights Size (INT8) = 1,536 MB / 4 = 384 MB (Savings: 1,152 MB!)
+  New Workload Demand:
+    Demand_quantized = 128 (OS) + 100 (RT) + 384 (ML) + 50 (Log) + 500 (Task 4)
+                     = 1,162 MB
+  Revised Headroom = 2,048 MB - 1,162 MB = +886 MB Free Space!
+  Result: Model quantization enables all 4 tasks to run concurrently with
+  massive safety margins on the 2 GB edge hardware!
+===============================================================================

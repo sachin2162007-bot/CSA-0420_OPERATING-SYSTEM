@@ -1,0 +1,17 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 05 - Synchronisation
+EXPERIMENT: Bounded Buffer Producer-Consumer (1 Prod, 1 Cons)
+COMMAND: ./bounded_buffer
+DATE: 2026-11-20
+
+items consumed: 20, sum = 210 (expected 210)
+
+INTERPRETATION:
+- Exact 100% match with expected output in Assignment 2 PDF specification!
+- 20 items produced (1..20) and consumed circularly in 5-slot buffer.
+- Sum = 20 * 21 / 2 = 210.
+- Synchronized with sem_empty (initial 5), sem_full (initial 0), and pthread_mutex_t.

@@ -1,0 +1,19 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 03 - Threads
+EXPERIMENT: 1 Thread Per Camera (64 Threads Concurrently)
+COMMAND: ./camera_threads
+DATE: 2026-11-20
+
+Processing 64 cameras using 1 thread per camera (64 threads)...
+64-thread concurrent execution completed.
+Total Cameras: 64 | Total Wall Time: 0.8240 seconds
+Speedup vs Sequential: 5.84x (4.8120s / 0.8240s)
+
+INTERPRETATION:
+- Spawning 64 concurrent POSIX kernel threads achieves 5.84x speedup on an 8-core CPU.
+- Speedup does not reach 64x due to hardware core limits (8 hardware execution units)
+  and thread scheduling / cache-line thrashing overhead.

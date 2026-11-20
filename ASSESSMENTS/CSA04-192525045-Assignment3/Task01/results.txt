@@ -1,0 +1,104 @@
+===============================================================================
+TASK 01: LINKING, LOADING AND ADDRESS BINDING - RESULTS AND OBSERVATIONS
+Student: S. Sachin | Register Number: 192525045 | Course: CSA04 CO3
+===============================================================================
+
+1. CLASSIFICATION OF RESULTS
+-------------------------------------------------------------------------------
+In accordance with the project guidelines, all outputs are classified into:
+  [EXPECTED OUTPUT]            : Verified standard output according to POSIX specifications.
+  [ILLUSTRATIVE SAMPLE OUTPUT] : Realistic system values representing a standard Ubuntu x86_64 system.
+  [THEORETICAL RESULT]         : Mathematical derivations and analytical bounds.
+
+2. EXECUTABLE SIZE COMPARISON [ILLUSTRATIVE SAMPLE OUTPUT]
+-------------------------------------------------------------------------------
+$ ls -lh crypto_static crypto_shared crypto_runtime libcrypto_demo.so libcrypto_demo.a
+-rwxr-xr-x 1 sachin sachin 892K Nov 20 23:00 crypto_static
+-rwxr-xr-x 1 sachin sachin  17K Nov 20 23:00 crypto_shared
+-rwxr-xr-x 1 sachin sachin  18K Nov 20 23:00 crypto_runtime
+-rwxr-xr-x 1 sachin sachin  16K Nov 20 23:00 libcrypto_demo.so
+-rw-r--r-- 1 sachin sachin 4.2K Nov 20 23:00 libcrypto_demo.a
+
+Observation:
+- The static executable is approximately 52x larger than the dynamic executable
+  because it incorporates startup code, CRT routines, and static archives directly.
+- The shared library `libcrypto_demo.so` is only 16 KB, containing position-independent
+  code (PIC) with dynamic symbol and relocation tables.
+
+3. DYNAMIC LINKER DEPENDENCY INSPECTION (ldd) [EXPECTED OUTPUT]
+-------------------------------------------------------------------------------
+$ ldd crypto_static
+        not a dynamic executable
+
+$ ldd crypto_shared
+        linux-vdso.so.1 (0x00007ffe349fe000)
+        libcrypto_demo.so => ./libcrypto_demo.so (0x00007f35b2e04000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f35b2c00000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f35b2e0c000)
+
+$ ldd crypto_runtime
+        linux-vdso.so.1 (0x00007ffe671ee000)
+        libdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f89c0200000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f89bff00000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007f89c0208000)
+
+Observation:
+- `crypto_static` has zero dependencies; it runs as a self-contained binary.
+- `crypto_shared` requires `libcrypto_demo.so` at load time. If absent, the program aborts.
+- `crypto_runtime` does NOT list `libcrypto_demo.so` in its static ELF dynamic dependencies!
+  It only depends on `libdl.so` and `libc.so`, allowing selective runtime binding.
+
+4. MEMORY MAPPING INSPECTION (/proc/self/maps) [ILLUSTRATIVE SAMPLE OUTPUT]
+-------------------------------------------------------------------------------
+From `crypto_shared`:
+7f35b2e04000-7f35b2e05000 r--p 00000000 08:01 1928374 /home/sachin/Task01/libcrypto_demo.so
+7f35b2e05000-7f35b2e06000 r-xp 00001000 08:01 1928374 /home/sachin/Task01/libcrypto_demo.so
+7f35b2e06000-7f35b2e07000 r--p 00002000 08:01 1928374 /home/sachin/Task01/libcrypto_demo.so
+7f35b2e07000-7f35b2e08000 rw-p 00003000 08:01 1928374 /home/sachin/Task01/libcrypto_demo.so
+7ffe349de000-7ffe349ff000 rw-p 00000000 00:00 0       [stack]
+
+Observation:
+- `libcrypto_demo.so` is mapped into high virtual memory (`0x7f35b2e04000`).
+- The code segment (`r-xp`) is mapped with execute permissions and marked private/shared
+  page-table clean (`p`), allowing physical memory frame sharing across all instances.
+- The data segment (`rw-p`) contains private copy-on-write variables.
+
+5. HOT-PATCHING VERIFICATION [EXPECTED OUTPUT]
+-------------------------------------------------------------------------------
+Before patch:
+[SHARED] Crypto Library Version: v1.0.0-Standard-XOR
+
+Command executed:
+make patch_v2   # Recompiles libcrypto_demo.so with v2.0.0-Security-Patched-AES
+
+After patch (running UNCHANGED crypto_shared executable):
+[SHARED] Crypto Library Version: v2.0.0-Security-Patched-AES
+
+Observation:
+- The banking application instantly inherited the updated security algorithm WITHOUT
+  requiring recompilation, relinking, or redeployment of the main 200 MB binary.
+
+6. MISSING LIBRARY FAULT TOLERANCE [EXPECTED OUTPUT]
+-------------------------------------------------------------------------------
+Test: Rename `libcrypto_demo.so` to simulate missing dependency.
+- Dynamic Shared (`./crypto_shared`):
+  ./crypto_shared: error while loading shared libraries: libcrypto_demo.so: cannot open shared object file: No such file or directory
+  Exit code: 127 (Abrupt process launch abort).
+
+- Runtime dlopen (`./crypto_runtime`):
+  [RUNTIME] Step 1: Performing ordinary branch logging (no crypto needed)...
+  [RUNTIME] Branch Teller ID #4092 logged in. Memory clean.
+  [RUNTIME] Step 2: Encrypted transaction requested. Calling dlopen()...
+  [RUNTIME ERROR] dlopen failed: ./libcrypto_demo.so: cannot open shared object file: No such file or directory
+  [FAULT TOLERANCE] Core banking application survives! Non-crypto mode engaged.
+  Exit code: Handled gracefully by application logic.
+
+7. CONCLUSION & RECOMMENDATION [THEORETICAL RESULT]
+-------------------------------------------------------------------------------
+Recommendation for Banking Software:
+- Use **Dynamic Shared Libraries (Load-Time Linking)** for standard enterprise modules
+  to maximize memory deduplication and minimize network bandwidth during updates (99% savings).
+- Use **Runtime Loading (`dlopen`)** for specialized security, regulatory, or hardware modules
+  to achieve fault isolation (so that missing optional hardware or regional tax plugins
+  never prevent the teller terminal from starting) and hot-plug capability.
+===============================================================================

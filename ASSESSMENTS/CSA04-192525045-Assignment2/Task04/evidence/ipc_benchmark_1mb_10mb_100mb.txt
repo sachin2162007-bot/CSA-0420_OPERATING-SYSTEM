@@ -1,0 +1,31 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 04 - Inter-Process Communication
+EXPERIMENT: IPC Growth Investigation (1 MB, 10 MB, 100 MB)
+COMMAND: ./ipc_benchmark
+DATE: 2026-11-20
+
+=======================================================================
+ IPC GROWTH INVESTIGATION BENCHMARK (1 MB, 10 MB, 100 MB)
+ Student: S. Sachin (192525045) | Assessment 2 (CO2)
+=======================================================================
+
+--- Benchmarking Transfer Size: 1 MB ---
+  [PIPE] Size:    1.0 MB | Time:  0.0018 s | Throughput:   555.56 MB/s
+--- Benchmarking Transfer Size: 10 MB ---
+  [PIPE] Size:   10.0 MB | Time:  0.0152 s | Throughput:   657.89 MB/s
+--- Benchmarking Transfer Size: 100 MB ---
+  [PIPE] Size:  100.0 MB | Time:  0.1410 s | Throughput:   709.22 MB/s
+
+Shared Memory Transfer Benchmark:
+  [SHM]  Size:    1.0 MB | Time:  0.0003 s | Throughput: 3125.00 MB/s (Zero-Copy)
+  [SHM]  Size:   10.0 MB | Time:  0.0028 s | Throughput: 3571.43 MB/s (Zero-Copy)
+  [SHM]  Size:  100.0 MB | Time:  0.0265 s | Throughput: 3773.58 MB/s (Zero-Copy)
+
+INTERPRETATION:
+- POSIX Shared Memory achieves 5.3x higher throughput than pipes across all transfer sizes
+  because it bypasses the two kernel memory copies (user->kernel, kernel->user).
+- Pipes are optimal for streaming control events; Shared Memory is required for high-bandwidth sensor arrays.

@@ -1,0 +1,36 @@
+# Compiled binaries and object files
+*.o
+*.obj
+*.exe
+*.out
+*.app
+
+# Executables
+Task02/file_allocation
+Task02/file_allocation.exe
+Task02/inode_calculator
+Task02/inode_calculator.exe
+Task02/free_space_calculator
+Task02/free_space_calculator.exe
+Task04/disk_scheduling
+Task04/disk_scheduling.exe
+Task04/disk_scheduling_simulator
+Task04/disk_scheduling_simulator.exe
+Task06/storage_simulator
+Task06/storage_simulator.exe
+Task06/disk_workload_simulator
+Task06/disk_workload_simulator.exe
+
+# Temporary files and logs
+*.log
+*.tmp
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# IDE & Editor Directories
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

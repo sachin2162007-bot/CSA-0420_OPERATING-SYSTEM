@@ -1,0 +1,19 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 05 - Synchronisation
+EXPERIMENT: Monitor Pattern Simulation with Condition Variables
+COMMAND: ./monitor_simulation
+DATE: 2026-11-20
+
+Monitor Pattern Demonstration (5 Agents competing for 3 seats)
+  [Agent 1] Booked seat successfully! Remaining: 2
+  [Agent 2] Booked seat successfully! Remaining: 1
+  [Agent 3] Booked seat successfully! Remaining: 0
+[Agent 4] No seats available! Waiting on condition variable...
+[Agent 5] No seats available! Waiting on condition variable...
+  ===> [Agent 2] Cancelled ticket. Signalling condition variable...
+  [Agent 4] Booked seat successfully! Remaining: 0
+Monitor simulation completed cleanly.

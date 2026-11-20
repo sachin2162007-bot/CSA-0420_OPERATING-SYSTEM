@@ -1,0 +1,24 @@
+======================================================================
+ LINUX FILE SYSTEM METADATA & INODE INSPECTION UTILITY
+ Student: S. Sachin | Reg: 192525045 | SIMATS Engineering
+ Target Path: .
+======================================================================
+
+[1. FILE INODE & ATTRIBUTE INSPECTION (stat)]:
+  File: .
+  Size: 4096        Blocks: 8          IO Block: 4096   directory
+Device: 801h/2049d  Inode: 14829103    Links: 2
+Access: (0755/drwxr-xr-x)  Uid: ( 1000/  sachin)   Gid: ( 1000/  sachin)
+
+[2. INODE USAGE & CAPACITY ACROSS MOUNTED FILESYSTEMS (df -i)]:
+Filesystem      Inodes IUsed IFree IUse% Mounted on
+/dev/sda1         2.5M  312K  2.2M   13% /
+/dev/sdb1        61.0M  1.2M 59.8M    2% /data
+
+[3. DIRECTORY INODE INDEX LISTING (ls -li)]:
+14829103 drwxr-xr-x 2 sachin sachin 4096 Nov 20 23:30 .
+
+[4. BLOCK SIZE & FILESYSTEM PARAMETERS]:
+Block size: 4096 bytes
+Inode size: 256 bytes
+Filesystem features: has_journal extents dir_index metadata_csum

@@ -1,0 +1,54 @@
+===============================================================================
+TASK 06: DISK MANAGEMENT AND RAID SYSTEMS - RESULTS AND OBSERVATIONS
+Student: S. Sachin | Register Number: 192525045 | Course: CSA04 CO3
+===============================================================================
+
+1. RAID 6-DISK x 4 TB EVALUATION MATRIX [THEORETICAL RESULT]
+-------------------------------------------------------------------------------
+RAID Level | Usable (TB)  | Parity (TB)  | Efficiency (%) | Fault Tol    | Write Penalty
+-----------------------------------------------------------------------------------
+RAID 0     |    24.0 TB   |      0.0 TB  |        100.0%  | 0 Disks      | 1x (No overhead)
+RAID 1     |    12.0 TB   |     12.0 TB  |         50.0%  | 1 / pair (3) | 2x (Dual write)
+RAID 5     |    20.0 TB   |      4.0 TB  |         83.3%  | 1 Disk       | 4x (2 Read, 2 Write)
+RAID 6     |    16.0 TB   |      8.0 TB  |         66.7%  | 2 Disks      | 6x (3 Read, 3 Write)
+RAID 10    |    12.0 TB   |     12.0 TB  |         50.0%  | 1 / pair (3) | 2x (Dual write)
+-----------------------------------------------------------------------------------
+
+2. PROBABILITY OF CATASTROPHIC DATA LOSS DURING REBUILD [THEORETICAL RESULT]
+-------------------------------------------------------------------------------
+RAID Level | Data Loss Probability (P_loss) | Relative Risk Assessment
+-------------------------------------------------------------------------------
+RAID 5     |           0.00041088 (0.0411%) | Baseline High Risk (1.0x)
+RAID 10    |           0.00008219 (0.0082%) | 5.0x Safer than RAID 5
+RAID 6     |           0.00000007 (0.0000%) | 6087x Safer than RAID 5
+-------------------------------------------------------------------------------
+
+3. LINUX STORAGE STRUCTURE INSPECTION (lsblk) [ILLUSTRATIVE SAMPLE OUTPUT]
+-------------------------------------------------------------------------------
+NAME        SIZE TYPE FSTYPE MOUNTPOINT
+nvme0n1     1.8T disk        
+├─nvme0n1p1 512M part vfat   /boot/efi
+├─nvme0n1p2   2G part ext4   /boot
+├─nvme0n1p3 1.7T part ext4   /
+└─nvme0n1p4  64G part swap   [SWAP]
+
+4. SAFE STORAGE READ SPEED BENCHMARK [ILLUSTRATIVE SAMPLE OUTPUT]
+-------------------------------------------------------------------------------
+Test File Size: 64 MB
+Cached Buffered Read Speed:    6,240 MB/s (Direct RAM Page Cache Hit)
+Direct NVMe SSD Read Speed:    2,840 MB/s (High-speed flash array)
+Comparative HDD Read Speed:      145 MB/s (Standard rotational magnetic disk)
+
+5. HOSPITAL RECORDS SERVER STORAGE RECOMMENDATION
+-------------------------------------------------------------------------------
+Recommendation: **Tiered Architecture with RAID 10 for Database and RAID 6 for Imaging Archives**.
+1. **Tier 1 (EHR Transactional Database & OS): RAID 10**
+   - No parity write penalty allows thousands of IOPS for patient record updates.
+   - 24-hour rebuild time does not stress remaining drives, preventing second-drive collapse.
+2. **Tier 2 (PACS Medical Imaging Archive - CT/MRI): RAID 6**
+   - High usable capacity (16 TB usable out of 24 TB raw).
+   - Dual parity protects patient scans against double-disk failure during rebuilds.
+3. **Swap Strategy:**
+   - 64 GB dedicated swap partition striped across high-speed NVMe drives to prevent
+     paging latency from freezing emergency room workstations during peak query bursts.
+===============================================================================

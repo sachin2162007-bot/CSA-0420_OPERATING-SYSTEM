@@ -1,0 +1,15 @@
+# Test Cases for File Allocation Simulator
+# Format: <Command> <FileID> <Size>
+
+INIT 32
+ALLOC_CONTIG A 6
+ALLOC_CONTIG B 8
+ALLOC_CONTIG C 5
+ALLOC_CONTIG D 7
+RELEASE B
+RELEASE D
+# State: AAAAAA........CCCCC............. (Free: 6-13 [8], 19-31 [13])
+ALLOC_CONTIG E 10
+# Expected: start 19
+ALLOC_INDEX E 10
+# Expected: index block 6, data blocks 7 8 9 10 11 12 13 29 30 31

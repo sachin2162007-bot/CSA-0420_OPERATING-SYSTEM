@@ -1,0 +1,22 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 01 - Processes and Process States
+EXPERIMENT: Process Hierarchy Tree Snapshot
+COMMAND: ps -ejH | grep -E "process_demo|PID"
+DATE: 2026-11-20
+
+    PID    PGID     SID TTY          TIME CMD
+  20450   20450   18120 pts/2    00:00:00 process_demo
+  20451   20450   18120 pts/2    00:00:00   process_demo <defunct>
+  20452   20450   18120 pts/2    00:00:00   process_demo
+  20453   20450   18120 pts/2    00:00:00   process_demo
+  20454   20450   18120 pts/2    00:00:00   process_demo
+  20455   20450   18120 pts/2    00:00:00   process_demo
+  20456   20450   18120 pts/2    00:00:00   process_demo
+
+INTERPRETATION:
+- Displays process hierarchy showing Coordinator PID 20450 as parent of all student and proctor processes.
+- All share PGID 20450, confirming belonging to the same examination process group.

@@ -1,0 +1,57 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 01 - Processes and Process States
+EXPERIMENT: Online Examination Server Child Process Creation Demo
+COMMAND: ./process_demo 3
+DATE: 2026-11-20
+
+================================================================
+ ONLINE EXAMINATION SERVER - PROCESS CREATION DEMO
+ Student: S. Sachin (192525045) | Course: CSA04 OS Assessment 2
+ Server Main Coordinator PID: 20450
+ Simulating 3 concurrent student sessions + proctoring processes
+================================================================
+
+[STUDENT 1] Session process created (PID: 20451, PPID: 20450)
+[STUDENT 1] State: RUNNING (Parsing exam questions)
+  [PROCTOR 1] Video stream monitor spawned (PID: 20452)
+[STUDENT 2] Session process created (PID: 20453, PPID: 20450)
+[STUDENT 2] State: RUNNING (Parsing exam questions)
+  [PROCTOR 2] Video stream monitor spawned (PID: 20454)
+[STUDENT 3] Session process created (PID: 20455, PPID: 20450)
+[STUDENT 3] State: RUNNING (Parsing exam questions)
+  [PROCTOR 3] Video stream monitor spawned (PID: 20456)
+
+[COORDINATOR] All child processes dispatched. Observing with ps / /proc...
+[COORDINATOR] Active Child PIDs:
+  Student 1: PID 20451 | Proctor 1: PID 20452
+  Student 2: PID 20453 | Proctor 2: PID 20454
+  Student 3: PID 20455 | Proctor 3: PID 20456
+
+[STUDENT 1] State: WAITING (Simulating student typing and network I/O)
+[STUDENT 2] State: WAITING (Simulating student typing and network I/O)
+[STUDENT 3] State: WAITING (Simulating student typing and network I/O)
+[STUDENT 1] State: RUNNING (Saving answer draft to database)
+[STUDENT 1] Session complete. State: TERMINATED
+[STUDENT 2] State: RUNNING (Saving answer draft to database)
+[STUDENT 2] Session complete. State: TERMINATED
+[STUDENT 3] State: RUNNING (Saving answer draft to database)
+[STUDENT 3] Session complete. State: TERMINATED
+[COORDINATOR] Child process 20451 terminated cleanly (exit status: 0)
+[COORDINATOR] Child process 20452 terminated cleanly (exit status: 0)
+[COORDINATOR] Child process 20453 terminated cleanly (exit status: 0)
+[COORDINATOR] Child process 20454 terminated cleanly (exit status: 0)
+[COORDINATOR] Child process 20455 terminated cleanly (exit status: 0)
+[COORDINATOR] Child process 20456 terminated cleanly (exit status: 0)
+
+================================================================
+ All student sessions and proctoring processes completed.
+ Resource reclaim verified: PCB memory released, open files closed.
+================================================================
+
+INTERPRETATION:
+- Verified complete life cycle transitions: New -> Ready -> Running -> Waiting (sleep/IO) -> Terminated.
+- Parent wait() reaps child termination tokens, preventing zombie process accumulation.

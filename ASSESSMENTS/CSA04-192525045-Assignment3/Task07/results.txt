@@ -1,0 +1,57 @@
+===============================================================================
+TASK 07: MEMORY MANAGEMENT PLAN - RESULTS AND OBSERVATIONS
+Student: S. Sachin | Register Number: 192525045 | Course: CSA04 CO3
+===============================================================================
+
+1. REAL-TIME LATENCY WITH VS WITHOUT mlockall() [ILLUSTRATIVE SAMPLE OUTPUT]
+-------------------------------------------------------------------------------
+Loop Iterations: 1,000 cycles | Working Buffer: 4 MB | Page Size: 4,096 B
+
+Phase 1 (Standard Linux Demand Paging - Unlocked):
+  Average Execution Time per Cycle:   1.84 us
+  Worst-Case Cycle Delay:          12,420.00 us (12.42 ms!)
+  Status: FAILED Real-Time Constraint (Exceeds 1.0 ms deadline by 12x)
+  Cause: Minor page fault traps and TLB/cache-line refilling.
+
+Phase 2 (Pinned Memory via mlockall + Pre-faulting):
+  Average Execution Time per Cycle:   0.62 us
+  Worst-Case Cycle Delay:             42.50 us (0.042 ms!)
+  Status: 100% PASSED Real-Time Constraint (< 1.0 ms)
+  Improvement Factor: 292x lower worst-case latency jitter!
+
+2. SYSTEM MEMORY SIMULATOR OUTPUT [EXPECTED OUTPUT]
+-------------------------------------------------------------------------------
+Scenario 1: Baseline 3 Tasks
+  Physical RAM: 2,048 MB | Total Demand: 1,814 MB | Free Headroom: 234 MB
+  Real-Time Control Task:   100 MB -> GUARANTEED PINNED (0 Faults)
+  ML Vision Inference:    1,536 MB -> Fully Allocated (1,536 MB resident)
+  System Logging Daemon:     50 MB -> Fully Allocated (50 MB resident)
+  System State: STABLE & DETERMINISTIC.
+
+Scenario 2: With Proposed 4th Task (500 MB)
+  Physical RAM: 2,048 MB | Total Demand: 2,314 MB | Deficit: 266 MB
+  Real-Time Control Task:   100 MB -> GUARANTEED PINNED (Protected by mlock)
+  ML Vision Inference:    1,536 MB -> OOM COLLAPSE / THRASHING
+  System Logging Daemon:     50 MB -> Starved
+  Proposed 4th Task:        500 MB -> Fails allocation (ENOMEM)
+  System State: CRITICAL FAILURE. Triggers Linux OOM Killer.
+
+3. COMPARISON: LINUX WITH mlock() VS. HARDWARE RTOS [THEORETICAL RESULT]
+-------------------------------------------------------------------------------
+Metric                    | Linux with mlock()        | RTOS (e.g. FreeRTOS / Zephyr)
+-------------------------------------------------------------------------------------
+Virtual Memory Support    | Full MMU support          | None (Physical Flat Memory)
+ML Task Feasibility       | High (Runs PyTorch/TF)    | Extreme difficulty (Requires MMU)
+Task Isolation / Safety   | Full user/kernel boundary | None (Single address space)
+Worst-Case Latency        | ~20-50 us (with PREEMPT_RT)| < 5 us (Deterministic)
+Effort to Add New Tasks   | Low (Standard POSIX apps) | High (Recompile entire image)
+Memory Management         | Dynamic paging + mlock    | Static fixed memory blocks
+
+4. FINAL ARCHITECTURAL DEFENSE
+-------------------------------------------------------------------------------
+Recommendation:
+1. Deploy **Linux with PREEMPT_RT Patch** and **Selective Memory Locking (`mlockall`)**.
+2. Isolate the Real-Time task into a 100 MB pinned physical memory partition.
+3. Quantize the Machine Learning task from FP32 (1.5 GB) to INT8 (384 MB).
+4. With quantization, the 500 MB fourth task runs safely with 886 MB of remaining headroom!
+===============================================================================

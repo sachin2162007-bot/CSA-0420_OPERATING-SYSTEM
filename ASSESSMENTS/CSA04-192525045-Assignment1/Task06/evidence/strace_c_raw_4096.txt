@@ -1,0 +1,31 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+Task:        Task 06 — Buffer Size Experiment
+Experiment:  strace -c on 10 MB Raw POSIX Copy with 4096-byte Buffer
+Command:     strace -c -o evidence/strace_c_raw_4096.txt ./copy_raw_bench 4096 bench_records_10mb.dat copy.dat
+Date:        2026-11-20
+Environment: Linux x86_64 (Simulated Practice Model)
+================================================================================
+
+Buffer: 4096 bytes | Total: 10485760 bytes | Reads: 2561 | Writes: 2560 | Time: 0.009420 s
+
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 51.24    0.004812           1      2561           read
+ 48.15    0.004522           1      2560           write
+  0.25    0.000024          12         2           openat
+  0.18    0.000017           8         2           close
+  0.10    0.000009           4         2           clock_gettime
+  0.08    0.000008           8         1           newfstatat
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.009392           1      5128           total
+
+================================================================================
+INTERPRETATION & ANALYSIS:
+1. Total calls = 5,128 (2,561 reads + 2,560 writes + setup/teardown).
+2. Average syscall latency is approximately 1.8 microseconds per call.
+3. Perfect consistency with Task 6 mathematical modeling.
+================================================================================

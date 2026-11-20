@@ -1,0 +1,107 @@
+===============================================================================
+TASK 05: PAGE-REPLACEMENT TECHNIQUES - WORKINGS AND PROOFS
+Student: S. Sachin | Register Number: 192525045 | Course: CSA04 CO3
+===============================================================================
+
+1. OFFICIAL REFERENCE STRING HAND CALCULATION PROOFS
+-------------------------------------------------------------------------------
+Reference String (Length = 20):
+  7, 0, 1, 2, 0, 3, 0, 4, 2, 3, 0, 3, 2, 1, 2, 0, 1, 7, 0, 1
+
+--- CASE A: 3 FRAMES ---
+1. FIFO Policy (3 Frames):
+   Step 01 (7): [7, -, -] -> Fault 1
+   Step 02 (0): [7, 0, -] -> Fault 2
+   Step 03 (1): [7, 0, 1] -> Fault 3
+   Step 04 (2): Evict 7 -> [2, 0, 1] -> Fault 4
+   Step 05 (0): Hit
+   Step 06 (3): Evict 0 -> [2, 3, 1] -> Fault 5
+   Step 07 (0): Evict 1 -> [2, 3, 0] -> Fault 6
+   Step 08 (4): Evict 2 -> [4, 3, 0] -> Fault 7
+   Step 09 (2): Evict 3 -> [4, 2, 0] -> Fault 8
+   Step 10 (3): Evict 0 -> [4, 2, 3] -> Fault 9
+   Step 11 (0): Evict 4 -> [0, 2, 3] -> Fault 10
+   Step 12 (3): Hit
+   Step 13 (2): Hit
+   Step 14 (1): Evict 2 -> [0, 1, 3] -> Fault 11
+   Step 15 (2): Evict 3 -> [0, 1, 2] -> Fault 12
+   Step 16 (0): Hit
+   Step 17 (1): Hit
+   Step 18 (7): Evict 0 -> [7, 1, 2] -> Fault 13
+   Step 19 (0): Evict 1 -> [7, 0, 2] -> Fault 14
+   Step 20 (1): Evict 2 -> [7, 0, 1] -> Fault 15
+   Total FIFO Faults (3 frames) = 15.
+
+2. LRU Policy (3 Frames):
+   Step 01 (7): [7, -, -] -> Fault 1
+   Step 02 (0): [7, 0, -] -> Fault 2
+   Step 03 (1): [7, 0, 1] -> Fault 3
+   Step 04 (2): Evict 7 (oldest) -> [2, 0, 1] -> Fault 4
+   Step 05 (0): Hit. Order: [2, 1, 0]
+   Step 06 (3): Evict 2 -> [3, 0, 1] -> Fault 5
+   Step 07 (0): Hit. Order: [3, 1, 0]
+   Step 08 (4): Evict 1 -> [3, 0, 4] -> Fault 6
+   Step 09 (2): Evict 3 -> [2, 0, 4] -> Fault 7
+   Step 10 (3): Evict 0 -> [2, 3, 4] -> Fault 8
+   Step 11 (0): Evict 4 -> [2, 3, 0] -> Fault 9
+   Step 12 (3): Hit
+   Step 13 (2): Hit. Order: [0, 3, 2]
+   Step 14 (1): Evict 0 -> [1, 3, 2] -> Fault 10
+   Step 15 (2): Hit
+   Step 16 (0): Evict 3 -> [1, 0, 2] -> Fault 11
+   Step 17 (1): Hit
+   Step 18 (7): Evict 2 -> [1, 0, 7] -> Fault 12
+   Step 19 (0): Hit
+   Step 20 (1): Hit
+   Total LRU Faults (3 frames) = 12.
+
+3. Optimal Policy (3 Frames):
+   Step 01 (7): [7, -, -] -> Fault 1
+   Step 02 (0): [7, 0, -] -> Fault 2
+   Step 03 (1): [7, 0, 1] -> Fault 3
+   Step 04 (2): Evict 7 (farthest future use) -> [2, 0, 1] -> Fault 4
+   Step 05 (0): Hit
+   Step 06 (3): Evict 1 -> [2, 0, 3] -> Fault 5
+   Step 07 (0): Hit
+   Step 08 (4): Evict 2 -> [4, 0, 3] -> Fault 6
+   Step 09 (2): Evict 4 -> [2, 0, 3] -> Fault 7
+   Step 10 (3): Hit
+   Step 11 (0): Hit
+   Step 12 (3): Hit
+   Step 13 (2): Hit
+   Step 14 (1): Evict 3 -> [2, 0, 1] -> Fault 8
+   Step 15 (2): Hit
+   Step 16 (0): Hit
+   Step 17 (1): Hit
+   Step 18 (7): Evict 2 -> [7, 0, 1] -> Fault 9
+   Step 19 (0): Hit
+   Step 20 (1): Hit
+   Total Optimal Faults (3 frames) = 9.
+
+--- CASE B: 4 FRAMES ---
+FIFO Faults: 10
+LRU Faults: 8
+Optimal Faults: 8
+
+-------------------------------------------------------------------------------
+2. BELADY'S ANOMALY MATHEMATICAL PROOF
+-------------------------------------------------------------------------------
+String: 1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5
+- FIFO with 3 Frames:
+  1[1] 2[1,2] 3[1,2,3] 4[2,3,4] 1[3,4,1] 2[4,1,2] 5[1,2,5] 1(hit) 2(hit) 3[2,5,3] 4[5,3,4] 5(hit)
+  Total Faults = 9.
+
+- FIFO with 4 Frames:
+  1[1] 2[1,2] 3[1,2,3] 4[1,2,3,4] 1(hit) 2(hit) 5[2,3,4,5] 1[3,4,5,1] 2[4,5,1,2] 3[5,1,2,3] 4[1,2,3,4] 5[2,3,4,5]
+  Total Faults = 10!
+  Increase: 9 faults -> 10 faults despite a 33% increase in memory frames!
+
+Why LRU Cannot Exhibit Belady's Anomaly (Stack Algorithm Theorem):
+  Let B(m, t) be the set of pages in memory of size m at time t.
+  For an algorithm to be a stack algorithm: B(m, t) must be a subset of B(m+1, t) for all t.
+  LRU simply chooses the top m elements of the reference stack.
+  Therefore: B_LRU(m, t) is strictly contained in B_LRU(m+1, t).
+  A page fault occurs if and only if the requested page is not in B(m, t).
+  Since B(m, t) is a subset of B(m+1, t), any hit with m frames is guaranteed to hit
+  with m+1 frames. Hence faults NEVER increase as frames increase.
+===============================================================================

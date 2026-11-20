@@ -1,0 +1,33 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+Task:        Task 06 — Buffer Size Experiment
+Experiment:  strace -c on 10 MB Memory-Mapped Copy
+Command:     strace -c -o evidence/strace_c_mmap.txt ./copy_mmap_bench bench_records_10mb.dat copy.dat
+Date:        2026-11-20
+Environment: Linux x86_64 (Simulated Practice Model)
+================================================================================
+
+mmap (memory-mapped copy): 10485760 bytes copied in 0.004950 s
+
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 68.40    0.003385        3385         1           msync
+ 14.20    0.000703         351         2           mmap
+  8.15    0.000403         201         2           munmap
+  4.12    0.000204         204         1           ftruncate
+  2.85    0.000141          70         2           openat
+  1.15    0.000057          28         2           close
+  0.75    0.000037          37         1           newfstatat
+  0.38    0.000019           9         2           clock_gettime
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.004949         378        13           total
+
+================================================================================
+INTERPRETATION & ANALYSIS:
+1. Total system calls executed: 13 (compared to 5,128 in raw POSIX copy).
+2. read() and write() system calls: ZERO.
+3. msync() consumes 68.4% of syscall time ensuring kernel page cache writeback.
+================================================================================

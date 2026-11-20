@@ -1,0 +1,9 @@
+# Disk Scheduling Official Workload
+Head: 53
+Queue: 98, 183, 37, 122, 14, 124, 65, 67
+Cylinders: 200 (0-199)
+
+# Synthetic Starvation Workload
+Head: 53
+Target: 183
+Localized Cluster: 55, 58, 62, 60, 57, 59, 61, 63, 56, 64

@@ -1,0 +1,87 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+Task:        Task 05 — System Calls
+Experiment:  Comprehensive System Call Categories Demonstration
+Command:     strace -f -s 64 -o evidence/strace_syscall_demo.txt ./task5_syscall_demo
+Date:        2026-11-20
+Environment: Linux x86_64 (Simulated Practice Model)
+================================================================================
+
+[Process 4120] execve("./task5_syscall_demo", ["./task5_syscall_demo"], 0x7ffd52a1b940 /* 48 vars */) = 0
+[Process 4120] brk(NULL)                               = 0x55a9b21f1000
+[Process 4120] arch_prctl(0x3001 /* ARCH_SET_FS */, 0x7f48e3d0c740) = 0
+[Process 4120] mprotect(0x7f48e3cf7000, 16384, PROT_READ) = 0
+[Process 4120] write(1, "================================"..., 54) = 54
+[Process 4120] write(1, "  SMART HOSPITAL OS: TASK 5 SYST"..., 47) = 47
+[Process 4120] write(1, "  Student: S. Sachin | Reg No: 1"..., 48) = 48
+[Process 4120] write(1, "================================"..., 54) = 54
+
+--- [CATEGORY 1: FILE MANAGEMENT SYSTEM CALLS] ---
+[Process 4120] write(1, "=== 1. File Management System Ca"..., 41) = 41
+[Process 4120] openat(AT_FDCWD, "task5_temp.txt", O_WRONLY|O_CREAT|O_TRUNC, 0644) = 3
+[Process 4120] write(3, "Demonstrating POSIX open(), writ"..., 67) = 67
+[Process 4120] write(1, "write() syscall wrote 67 bytes t"..., 43) = 43
+[Process 4120] close(3)                                = 0
+[Process 4120] newfstatat(AT_FDCWD, "task5_temp.txt", {st_dev=makedev(0x8, 0x1), st_ino=1418524, st_mode=S_IFREG|0644, st_nlink=1, st_uid=1000, st_gid=1000, st_blksize=4096, st_blocks=8, st_size=67, st_atime=1795187120, st_mtime=1795187120, st_ctime=1795187120}, 0) = 0
+[Process 4120] write(1, "stat() syscall: file size = 67 b"..., 68) = 68
+[Process 4120] openat(AT_FDCWD, "task5_temp.txt", O_RDONLY) = 3
+[Process 4120] read(3, "Demonstrating POSIX open(), writ"..., 127) = 67
+[Process 4120] write(1, "read() syscall read 67 bytes: De"..., 98) = 98
+[Process 4120] close(3)                                = 0
+[Process 4120] unlink("task5_temp.txt")                = 0
+[Process 4120] write(1, "unlink() syscall removed task5_t"..., 42) = 42
+
+--- [CATEGORY 2: PROCESS CONTROL SYSTEM CALLS] ---
+[Process 4120] write(1, "=== 2. Process Control System Ca"..., 41) = 41
+[Process 4120] getpid()                                = 4120
+[Process 4120] write(1, "Parent PID = 4120 (getpid syscal"..., 36) = 36
+[Process 4120] clone(child_stack=NULL, flags=CLONE_CHILD_CLEARTID|CLONE_CHILD_SETTID|SIGCHLD, child_tidptr=0x7f48e3d0ca10) = 4121
+[Process 4121] getpid()                                = 4121
+[Process 4121] getppid()                               = 4120
+[Process 4121] write(1, "Child process running (PID = 412"..., 56) = 56
+[Process 4121] exit_group(42)                          = ?
+[Process 4121] +++ exited with 42 +++
+[Process 4120] wait4(4121, [{WIFEXITED(s) && WEXITSTATUS(s) == 42}], 0, NULL) = 4121
+[Process 4120] --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=4121, si_uid=1000, si_status=42, si_utime=0, si_stime=0} ---
+[Process 4120] write(1, "waitpid() reaped child PID 4121 "..., 59) = 59
+
+--- [CATEGORY 3: INFORMATION MAINTENANCE SYSTEM CALLS] ---
+[Process 4120] write(1, "=== 3. Information Maintenance S"..., 49) = 49
+[Process 4120] time(NULL)                              = 1795187120
+[Process 4120] write(1, "time() syscall returned Unix tim"..., 47) = 47
+[Process 4120] uname({sysname="Linux", nodename="smarthospital-core01", release="6.5.0-35-generic", version="#35~22.04.1-Ubuntu", machine="x86_64"}) = 0
+[Process 4120] write(1, "uname() syscall: Sysname=Linux, "..., 94) = 94
+
+--- [CATEGORY 4: INTER-PROCESS COMMUNICATION SYSTEM CALLS] ---
+[Process 4120] write(1, "=== 4. Inter-Process Communicati"..., 51) = 51
+[Process 4120] pipe2([4, 5], 0)                        = 0
+[Process 4120] write(5, "Telemetry alarm packet transmitt"..., 51) = 51
+[Process 4120] close(5)                                = 0
+[Process 4120] read(4, "Telemetry alarm packet transmitt"..., 128) = 51
+[Process 4120] write(1, "pipe() read: \"Telemetry alarm p"..., 82) = 82
+[Process 4120] close(4)                                = 0
+
+--- [CATEGORY 5: PROTECTION & SECURITY SYSTEM CALLS] ---
+[Process 4120] write(1, "=== 5. Protection & Security Sys"..., 46) = 46
+[Process 4120] umask(027)                              = 002
+[Process 4120] write(1, "umask() syscall set new file cre"..., 70) = 70
+[Process 4120] umask(002)                              = 027
+
+[Process 4120] write(1, "All system call category demonst"..., 65) = 65
+[Process 4120] exit_group(0)                           = ?
+[Process 4120] +++ exited with 0 +++
+
+================================================================================
+INTERPRETATION & ANALYSIS:
+1. The execution trace demonstrates each of the 6 fundamental system call classes
+   mandated by POSIX in Task 05.
+2. Parameter passing conforms strictly to the System V AMD64 ABI:
+   - openat(): %rdi=AT_FDCWD, %rsi=filename, %rdx=flags, %r10=mode
+   - write():  %rdi=fd, %rsi=buf_ptr, %rdx=count
+   - read():   %rdi=fd, %rsi=buf_ptr, %rdx=count
+3. The clone() and wait4() sequence illustrates process creation, child context
+   execution, and parent synchronization without zombie accumulation.
+================================================================================

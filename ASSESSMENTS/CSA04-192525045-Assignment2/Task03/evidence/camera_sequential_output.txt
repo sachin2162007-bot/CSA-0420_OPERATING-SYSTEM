@@ -1,0 +1,18 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 03 - Threads
+EXPERIMENT: Sequential Traffic Camera Processing
+COMMAND: ./camera_sequential
+DATE: 2026-11-20
+
+Processing 64 traffic cameras sequentially...
+Sequential execution completed.
+Total Cameras: 64 | Total Wall Time: 4.8120 seconds | Avg per Cam: 75.1875 ms
+
+INTERPRETATION:
+- Processing 64 cameras in serial loop takes 4.8120 seconds.
+- Single thread leaves multi-core CPU hardware 87.5% idle on an 8-core machine.
+- Falls behind during peak traffic load where 30 frames/sec per camera are ingested.

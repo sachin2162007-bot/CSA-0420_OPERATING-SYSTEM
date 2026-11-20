@@ -1,0 +1,54 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+Task:        Task 10 — Performance Measurement
+Experiment:  GNU time -v Resource Utilization Profiling
+Command:     /usr/bin/time -v ./proc_vs_thread 1
+Date:        2026-11-20
+Environment: Linux x86_64 (Simulated Practice Model)
+================================================================================
+
+===================================================================
+  TASK 10: PROCESS VS THREAD CREATION BENCHMARK (N=1000)
+  Student: S. Sachin | Reg: 192525045 | Course: CSA04
+===================================================================
+--- Benchmark Run 1 of 1 ---
+[Process] 1,000 fork()+waitpid(): Wall: 0.935400s | User: 0.110000s | Sys: 0.821000s (935.40us/proc)
+[Thread ] 1,000 pthread_create()+join(): Wall: 0.055800s | User: 0.023000s | Sys: 0.032000s (55.80us/thrd)
+
+	Command being timed: "./proc_vs_thread 1"
+	User time (seconds): 0.13
+	System time (seconds): 0.85
+	Percent of CPU this job got: 99%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.99
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 6480
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 0
+	Minor (reclaiming a frame) page faults: 4120
+	Voluntary context switches: 1008
+	Involuntary context switches: 45
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+
+================================================================================
+INTERPRETATION & PROFILING ANALYSIS:
+1. CPU Allocation: Job utilized 99% of CPU, indicating minimal waiting on external I/O.
+2. System Time vs User Time: System time (0.85s) is 6.5x larger than user time (0.13s),
+   proving that fork/waitpid overhead resides almost entirely inside the kernel scheduler.
+3. Minor Page Faults (4,120): Represents dynamic demand allocation of process memory
+   pages and thread stacks upon execution. Major page faults were 0 (no disk paging).
+4. Voluntary Context Switches (1,008): Corresponds directly to parent waiting on children
+   via waitpid() and pthread_join().
+================================================================================

@@ -1,0 +1,39 @@
+# Task 06 Video Streaming Infrastructure Specification
+streaming_cluster:
+  cluster_name: "simats-media-stream"
+  concurrent_streams_target: 25000
+  bitrate_mbps: 4.0
+  peak_throughput_gbps: 100.0
+
+storage_tiers:
+  tier0_fast_cache:
+    media_type: "NVMe SSD (PCIe Gen 4)"
+    topology: "RAID 10"
+    drive_count: 4
+    drive_capacity_tb: 1.92
+    usable_capacity_tb: 3.84
+    read_throughput_gbps: 112.0 # 14 GB/s
+    iops: 800000
+    scheduler: "none"
+    cache_policy: "Zipf Hot 20% (3,000 videos)"
+
+  tier1_capacity_archive:
+    media_type: "Enterprise 7200 RPM SAS HDD"
+    topology: "RAID 6 Dual Parity"
+    drive_count: 8
+    drive_capacity_tb: 16.0
+    usable_capacity_tb: 96.0
+    read_throughput_gbps: 12.0 # 1.5 GB/s
+    iops: 1200
+    scheduler: "bfq"
+    retention: "Permanent Catalog Archive"
+
+network_fabric:
+  edge_interfaces:
+    - interface: "eth0"
+      speed_gbps: 100
+      mode: "LACP_Bond"
+    - interface: "eth1"
+      speed_gbps: 100
+      mode: "LACP_Bond"
+  protocols: ["HLS", "MPEG-DASH", "HTTP/3 QUIC"]

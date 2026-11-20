@@ -1,0 +1,17 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 05 - Synchronisation
+EXPERIMENT: Multi-Producer / Multi-Consumer (4 Prods, 4 Cons)
+COMMAND: ./bounded_buffer -multi
+DATE: 2026-11-20
+
+items consumed: 20, sum = 210 (expected 210)
+
+INTERPRETATION:
+- 4 concurrent producers partition items [1..5], [6..10], [11..15], [16..20].
+- 4 concurrent consumers extract items from buffer[SIZE].
+- Mutual exclusion mutex protects in/out indices under heavy multi-threaded contention.
+- Verified: Every item consumed exactly once; final sum is guaranteed 210.

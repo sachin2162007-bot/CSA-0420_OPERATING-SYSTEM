@@ -1,0 +1,19 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 05 - Synchronisation
+EXPERIMENT: 100 Consecutive Runs Deterministic Sum Verification
+COMMAND: for i in $(seq 1 100); do ./bounded_buffer; done
+DATE: 2026-11-20
+
+=== 100 RUNS VERIFICATION FOR SUM = 210 ===
+Run   1: items consumed: 20, sum = 210 (expected 210) -> OK
+Run   2: items consumed: 20, sum = 210 (expected 210) -> OK
+Run   3: items consumed: 20, sum = 210 (expected 210) -> OK
+...
+Run 100: items consumed: 20, sum = 210 (expected 210) -> OK
+
+SUCCESS: All 100 runs completed with exact sum = 210 (100% Deterministic Guarantee).
+Zero race conditions detected. Zero deadlock occurrences.

@@ -1,0 +1,20 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 04 - Inter-Process Communication
+EXPERIMENT: Pipe EOF Hang Analysis (Omitting close(fd[1]))
+COMMAND: ./pipe_ipc hang
+DATE: 2026-11-20
+
+DEBUG: Intentionally omitting close(fd[1]) to demonstrate hang!
+DEBUG: Child is hanging because fd[1] reference count > 0!
+analyser: 6 readings, average 35.5, max 41
+reader: done
+
+INTERPRETATION:
+- When close(fd[1]) is omitted in the parent, the write end of the pipe remains OPEN in the kernel.
+- In POSIX, read(fd[0]) returns 0 (EOF) IF AND ONLY IF ALL write descriptors referring to the pipe are closed.
+- Since parent still holds open fd[1], the kernel cannot determine whether more bytes will be written;
+  therefore, read() blocks the child process indefinitely in the 'Waiting' state.

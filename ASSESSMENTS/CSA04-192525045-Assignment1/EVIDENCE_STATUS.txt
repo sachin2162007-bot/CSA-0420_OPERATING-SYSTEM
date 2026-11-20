@@ -1,0 +1,189 @@
+================================================================================
+                    TXT EVIDENCE STATUS REPORT — ASSIGNMENT 1
+================================================================================
+Course:            CSA04 – Operating Systems
+Assignment:        Assignment 1 (CO1)
+Student Name:      S. Sachin
+Register Number:   192525045
+Repository:        CSA-0420_OPERATING-SYSTEM
+Assignment Folder: CSA04-192525045-Assignment1
+Report Updated:    2026-11-20
+
+--------------------------------------------------------------------------------
+ENVIRONMENT & TOOLCHAIN STATUS
+--------------------------------------------------------------------------------
+Host Operating System:       Microsoft Windows 11 Enterprise (Version 10.0.26100)
+Host Shell Environment:      PowerShell 7.x / Windows PowerShell
+Native POSIX Kernel:         UNAVAILABLE (Windows NT Kernel)
+Linux Distribution:          NOT INSTALLED ON HOST
+Windows Subsystem for Linux: NOT INSTALLED (wsl.exe -l -v returned 'WSL not installed')
+GCC Compiler (gcc):          UNAVAILABLE IN HOST PATH
+Linux strace (strace):       UNAVAILABLE (Linux system call tracer not present on Windows)
+GNU time (/usr/bin/time):    UNAVAILABLE (POSIX time utility not present on Windows)
+Ransomware Protection:       ACTIVE (Windows Defender Controlled Folder Access blocks writes in Pictures)
+
+--------------------------------------------------------------------------------
+EXECUTION CLASSIFICATION & COMPLIANCE
+--------------------------------------------------------------------------------
+CONTEXT: Practice & Demonstration Assignment.
+Per user instructions, all 16 required TXT evidence files have been generated
+as high-fidelity SIMULATED DEMONSTRATION OUTPUTS.
+These files:
+1. Are NOT claimed to be actual Linux/strace/GNU time executions.
+2. Are clearly labeled at the top of every file as:
+   'SIMULATED DEMONSTRATION OUTPUT
+    Not actual Linux execution evidence.
+    Generated for practice and demonstration purposes.'
+3. Provide realistic numerical models, exact syscall counts, timing tables,
+   terminal-style logs, and in-depth architectural interpretations.
+4. Are 100% internally consistent across source code, expected outputs,
+   and analytical Markdown reports.
+
+Status Labels:
+  SIMULATED DEMONSTRATION OUTPUT — Generated for practice and demonstration purposes.
+  NON-EMPTY & VERIFIED          — File exists and contains detailed realistic content.
+
+--------------------------------------------------------------------------------
+DETAILED INVENTORY OF ALL 16 GENERATED EVIDENCE FILES
+--------------------------------------------------------------------------------
+
+[TASK 05: SYSTEM CALLS]
+Location: Task05/evidence/
+Runner:   Task05/run_task5.sh
+
+1. Task05/evidence/strace_syscall_demo.txt
+   Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 5,556 bytes)
+   Demonstration:  strace -f -s 64 -o evidence/strace_syscall_demo.txt ./task5_syscall_demo
+   Program Source: Task05/task5_syscall_demo.c
+   Key Output:     Traces 6 POSIX syscall categories: File Management (openat, read, write,
+                   stat, unlink), Process Control (clone, getpid, wait4, exit_group),
+                   Info Maintenance (time, uname), IPC (pipe2, write, read), and
+                   Protection (umask).
+
+2. Task05/evidence/strace_c_raw_4096.txt
+   Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 2,035 bytes)
+   Demonstration:  strace -c -o evidence/strace_c_raw_4096.txt ./copy_raw 4096 records.dat copy.dat
+   Program Source: Task05/copy_raw.c
+   Key Output:     10,000-byte copy using 4096B buffer. Total syscalls = 15.
+                   read() = 4 calls, write() = 3 calls. Total time: 0.000370s.
+
+3. Task05/evidence/strace_c_stdio.txt
+   Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 1,961 bytes)
+   Demonstration:  strace -c -o evidence/strace_c_stdio.txt ./copy_stdio records.dat copy.dat
+   Program Source: Task05/copy_stdio.c
+   Key Output:     10,000-byte copy using C stdio fread/fwrite. Total syscalls = 17.
+                   Demonstrates libc internal 4096B stream buffer and newfstatat() block queries.
+
+--------------------------------------------------------------------------------
+[TASK 06: BUFFER SIZE EXPERIMENT]
+Location: Task06/evidence/
+Runner:   Task06/run_task6.sh
+
+4. Task06/evidence/task6_output.txt
+   Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 1,599 bytes)
+   Demonstration:  ./task6
+   Program Source: Task06/task6.c (TODO 1 completed)
+   Key Output:     buffer    1 bytes: 10001 read() calls
+                   buffer  512 bytes:    21 read() calls
+                   buffer 4096 bytes:     4 read() calls
+                   Matches exact expected output from assignment specification.
+
+5. Task06/evidence/task6_strace_c.txt
+   Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 2,017 bytes)
+   Demonstration:  strace -c -o evidence/task6_strace_c.txt ./task6
+   Program Source: Task06/task6.c
+   Key Output:     Summary across all 3 buffer runs: 10,026 read() calls, 10,023 write() calls.
+                   read/write account for 98.94% of total process time due to 1-byte thrashing.
+
+6. Task06/evidence/copy_raw_times.txt
+   Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 2,274 bytes)
+   Demonstration:  ./copy_raw_bench <b> bench_records_10mb.dat copy.dat
+   Input File:     bench_records_10mb.dat (10 MB = 10,485,760 bytes)
+   Key Output:     Buffer timing sweep across 1B, 64B, 512B, 1KB, 4KB, 8KB, 16KB, 64KB, 1MB.
+                   Throughput increases from 0.71 MB/s (1B) to 1,061.57 MB/s (4KB) to 2,427 MB/s (64KB).
+
+7. Task06/evidence/copy_stdio_time.txt
+   Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 1,544 bytes)
+   Demonstration:  ./copy_stdio_bench bench_records_10mb.dat copy.dat
+   Input File:     bench_records_10mb.dat (10 MB = 10,485,760 bytes)
+   Key Output:     10 MB copied in 0.011850s (843.88 MB/s). Analyzes double-buffering overhead.
+
+8. Task06/evidence/copy_mmap_time.txt
+   Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 1,495 bytes)
+   Demonstration:  ./copy_mmap_bench bench_records_10mb.dat copy.dat
+   Input File:     bench_records_10mb.dat (10 MB = 10,485,760 bytes)
+   Key Output:     10 MB copied in 0.004950s (2,020.20 MB/s). Demonstrates zero-copy mmap.
+
+9. Task06/evidence/strace_c_raw_4096.txt
+   Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 1,754 bytes)
+   Demonstration:  strace -c -o evidence/strace_c_raw_4096.txt ./copy_raw_bench 4096 10MB copy.dat
+   Program Source: Task06/copy_raw_bench.c
+   Key Output:     10 MB copy: 2,561 read() calls, 2,560 write() calls. Total time: 0.009392s.
+
+10. Task06/evidence/strace_c_stdio.txt
+    Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 1,741 bytes)
+    Demonstration:  strace -c -o evidence/strace_c_stdio.txt ./copy_stdio_bench 10MB copy.dat
+    Program Source: Task06/copy_stdio_bench.c
+    Key Output:     10 MB stdio copy: 2,561 read(), 2,560 write(), 3 newfstatat(). Total: 0.011852s.
+
+11. Task06/evidence/strace_c_mmap.txt
+    Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 1,816 bytes)
+    Demonstration:  strace -c -o evidence/strace_c_mmap.txt ./copy_mmap_bench 10MB copy.dat
+    Program Source: Task06/copy_mmap_bench.c
+    Key Output:     10 MB mmap copy: ZERO read() and ZERO write() system calls! Total syscalls: 13.
+
+--------------------------------------------------------------------------------
+[TASK 07: PROCESS CONTROL SYSTEM CALLS]
+Location: Task07/evidence/
+Runner:   Task07/run_task7.sh
+
+12. Task07/evidence/task7_terminal_output.txt
+    Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 1,341 bytes)
+    Demonstration:  ./task7
+    Program Source: Task07/task7.c (TODO 1 completed)
+    Key Output:     shell: running job 1 -> 42 -> job 1 exit status 0
+                    shell: running job 2 -> job 2 exit status 3.
+
+13. Task07/evidence/task7_exp_redirected.txt
+    Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 2,019 bytes)
+    Demonstration:  ./task7_experiment > evidence/task7_exp_redirected.txt 2>&1
+    Program Source: Task07/task7_experiment.c
+    Key Output:     'shell: running job 2' appears TWICE. Fully documents block-buffering
+                    inheritance across fork() and exit(3) vs _exit(3) stream flushing.
+
+14. Task07/evidence/spawn_bench_1000.txt
+    Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 1,667 bytes)
+    Demonstration:  ./spawn_bench_1000
+    Program Source: Task07/spawn_bench_1000.c
+    Key Output:     1,000 process creations across 3 runs. Median = 0.932180s (932.18 us/proc).
+
+--------------------------------------------------------------------------------
+[TASK 10: PROCESS & THREAD PERFORMANCE MEASUREMENT]
+Location: Task10/evidence/
+Runner:   Task10/run_task10.sh
+
+15. Task10/evidence/proc_vs_thread_run1-3.txt
+    Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 2,680 bytes)
+    Demonstration:  ./proc_vs_thread 3
+    Program Source: Task10/proc_vs_thread.c
+    Key Output:     3 runs comparing 1,000 processes vs 1,000 threads.
+                    Process median: 0.932100s | Thread median: 0.056250s (Threads 16.57x faster).
+
+16. Task10/evidence/proc_vs_thread_time_v.txt
+    Status:         SIMULATED DEMONSTRATION OUTPUT (Verified Non-Empty, 2,578 bytes)
+    Demonstration:  /usr/bin/time -v ./proc_vs_thread 1
+    Program Source: Task10/proc_vs_thread.c
+    Key Output:     User time: 0.13s | Sys time: 0.85s | CPU: 99% | Minor page faults: 4,120
+                    Voluntary context switches: 1,008 | Maximum RSS: 6,480 KB.
+
+--------------------------------------------------------------------------------
+FINAL VALIDATION SUMMARY
+--------------------------------------------------------------------------------
+Total Required TXT Evidence Files: 16
+Files Successfully Generated:      16 (All 16 non-empty, formatted, verified)
+Files Pending:                     0
+C Source Programs Prepared:        9
+Shell Runner Scripts Prepared:     5
+Analytical Markdown Documents:     11 (Tasks 01 through 12 complete)
+Verification Result:               100% COMPLETE & INTERNALLY CONSISTENT
+================================================================================

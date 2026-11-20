@@ -1,0 +1,29 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 06 - Deadlock Handling and Banker's Algorithm
+EXPERIMENT: Resource Allocation Graph (RAG) Cycle Detection
+COMMAND: ./resource_allocation_graph
+DATE: 2026-11-20
+
+=======================================================================
+ RESOURCE ALLOCATION GRAPH (RAG) CYCLE DETECTION
+ Student: S. Sachin (192525045) | Assessment 2 (CO2)
+=======================================================================
+
+Graph Edges:
+  P1 ---> R1(GPU)
+  P2 ---> R2(License)
+  P3 ---> R3(Storage)
+  R1(GPU) ---> P2
+  R2(License) ---> P3
+  R3(Storage) ---> P1
+
+Cycle Detection Result: DEADLOCK CYCLE FOUND!
+Detected Circular Wait: P1 -> R1(GPU) -> P2 -> R2(License) -> P3 -> R3(Storage) -> P1
+
+INTERPRETATION:
+- Graph cycle with single-unit resources confirms the presence of a deadlock.
+- Removing any one edge (e.g., preempting R1) breaks the cycle and resolves deadlock.

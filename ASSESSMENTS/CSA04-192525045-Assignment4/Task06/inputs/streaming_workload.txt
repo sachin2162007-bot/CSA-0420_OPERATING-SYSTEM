@@ -1,0 +1,8 @@
+# Video Streaming Workload Parameters
+Students: 200,000
+Peak Concurrency: 25,000 streams
+Stream Resolution: 1080p (4.0 Mbps / 0.5 MB/s)
+Aggregate Peak Throughput: 100 Gbps (12.5 GB/s)
+Catalog: 15,000 videos (300 MB - 2 GB, mean 800 MB)
+HLS Segment Size: 3.0 MB (6.0 seconds)
+Zipfian Popularity Skew Alpha: 0.85

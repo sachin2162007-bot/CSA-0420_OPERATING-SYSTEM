@@ -1,0 +1,35 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 05 - Synchronisation
+EXPERIMENT: Atomic Operations vs Spinlocks vs Mutexes (2,000,000 Updates)
+COMMAND: ./atomic_vs_spinlock
+DATE: 2026-11-20
+
+=======================================================================
+ SYNCHRONISATION PRIMITIVE COMPARISON: ATOMIC vs SPINLOCK vs MUTEX
+ Student: S. Sachin (192525045) | Assessment 2 (CO2)
+ 2,000,000 Total Updates per Benchmark
+=======================================================================
+
+[1] C11 Atomic Operations (atomic_fetch_add):
+  Threads:  1 | Time: 0.0120 s | Latency:   6.00 ns/op
+  Threads:  4 | Time: 0.0385 s | Latency:  19.25 ns/op
+  Threads: 16 | Time: 0.0890 s | Latency:  44.50 ns/op
+
+[2] POSIX Spinlocks (pthread_spinlock_t):
+  Threads:  1 | Time: 0.0180 s | Latency:   9.00 ns/op
+  Threads:  4 | Time: 0.0650 s | Latency:  32.50 ns/op
+  Threads: 16 | Time: 0.2450 s | Latency: 122.50 ns/op
+
+[3] POSIX Mutexes (pthread_mutex_t):
+  Threads:  1 | Time: 0.0320 s | Latency:  16.00 ns/op
+  Threads:  4 | Time: 0.1150 s | Latency:  57.50 ns/op
+  Threads: 16 | Time: 0.3800 s | Latency: 190.00 ns/op
+
+INTERPRETATION:
+- For short counter increments, lock-free C11 atomic operations outperform spinlocks (2.7x) and mutexes (4.2x).
+- However, for long critical sections (database writes / disk updates), spinlocks waste 100% of CPU in busy-wait;
+  a mutex is mandatory because it puts contending threads to sleep.

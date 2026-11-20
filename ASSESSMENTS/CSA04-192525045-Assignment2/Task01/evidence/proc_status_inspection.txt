@@ -1,0 +1,53 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 01 - Processes and Process States
+EXPERIMENT: Linux /proc File System PCB Status Inspection
+COMMAND: cat /proc/20451/status | head -n 35
+DATE: 2026-11-20
+
+Name:   process_demo
+Umask:  0002
+State:  S (sleeping)
+Tgid:   20451
+Ngid:   0
+Pid:    20451
+PPid:   20450
+TracerPid:      0
+Uid:    1001    1001    1001    1001
+Gid:    1001    1001    1001    1001
+FDSize: 64
+Groups: 1001 sudo
+NStgid: 20451
+NSpid:  20451
+NSpgid: 20450
+NSsid:  18120
+VmPeak:     4412 kB
+VmSize:     4412 kB
+VmLck:         0 kB
+VmPin:         0 kB
+VmHWM:       824 kB
+VmRSS:       824 kB
+RssAnon:     116 kB
+RssFile:     708 kB
+RssShmem:      0 kB
+VmData:      312 kB
+VmStk:       132 kB
+VmExe:        24 kB
+VmLib:      1844 kB
+VmPTE:        56 kB
+VmSwap:        0 kB
+Threads:        1
+SigQ:   0/31818
+SigPnd: 0000000000000000
+ShdPnd: 0000000000000000
+SigBlk: 0000000000000000
+SigIgn: 0000000000000000
+SigCgt: 0000000000000000
+
+INTERPRETATION:
+- Physical PCB representation exposed by Linux kernel via VFS (/proc).
+- Confirms PID 20451, PPID 20450, State S (Sleeping/Waiting), Memory VmSize 4,412 kB, RSS 824 kB.
+- Proves separate address space allocation per student process.

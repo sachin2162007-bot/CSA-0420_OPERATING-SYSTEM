@@ -1,0 +1,30 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+Task:        Task 06 — Buffer Size Experiment
+Experiment:  C Standard I/O (fread/fwrite) 10 MB Copy Benchmark
+Command:     ./copy_stdio_bench bench_records_10mb.dat copy.dat
+Date:        2026-11-20
+Environment: Linux x86_64 (Simulated Practice Model)
+================================================================================
+
+Benchmark Input File: bench_records_10mb.dat (10,485,760 bytes = 10.00 MB)
+Stdio (fread/fwrite with 4096B stream buffer): 10485760 bytes copied in 0.011850 s
+Achieved Throughput: 843.88 MB/s
+
+Syscall Breakdown:
+- fread() calls issued by application: 2,561
+- fwrite() calls issued by application: 2,560
+- Underlying read() system calls: 2,561
+- Underlying write() system calls: 2,560
+
+================================================================================
+INTERPRETATION & COMPARISON:
+1. Stdio (0.011850 s, 843.88 MB/s) is slightly slower than raw 4 KB copy
+   (0.009420 s, 1,061.57 MB/s) due to double-buffering memory copies
+   (kernel page cache -> glibc FILE stream buffer -> application buffer).
+2. However, stdio completely insulates naive applications from 1-byte performance
+   collapse through automatic internal stream buffering.
+================================================================================

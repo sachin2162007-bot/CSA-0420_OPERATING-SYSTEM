@@ -1,0 +1,19 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 05 - Synchronisation
+EXPERIMENT: Bounded Buffer Without Mutex (Race Condition Test)
+COMMAND: ./bounded_buffer -multi -nomutex
+DATE: 2026-11-20
+
+items consumed: 20, sum = 184 (expected 210)
+*** DATA RACE OCCURRED: Corrupted sum (-26 difference)! ***
+
+INTERPRETATION:
+- When pthread_mutex_t is removed, empty/full semaphores prevent buffer underflow/overflow,
+  BUT multiple producers update the shared index 'in' simultaneously (e.g. in = (in + 1) % SIZE).
+- Two producers overwrite the same buffer slot, while consumers read stale data.
+- Proves that semaphores ALONE do not provide mutual exclusion for multi-producer buffer slots;
+  a binary semaphore or mutex is strictly required.

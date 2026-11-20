@@ -1,0 +1,68 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 02 - CPU Scheduling
+EXPERIMENT: Comprehensive Comparison Across All 5 Algorithms
+COMMAND: ./scheduling_comparison
+DATE: 2026-11-20
+
+=======================================================================
+ COMPREHENSIVE CPU SCHEDULING BENCHMARK - VIDEO SERVICE JOBS
+ Student: S. Sachin (192525045) | Assessment 2 (CO2)
+ Jobs: P1(0,8), P2(1,4), P3(2,9), P4(3,5)
+=======================================================================
+
+Gantt Chart (FCFS):
+|  P1 (0-8)  |  P2 (8-12)  |  P3 (12-21)  |  P4 (21-26)  |
+-----------------------------------------------------------------------
+ Algorithm: First-Come, First-Served (FCFS)
+-----------------------------------------------------------------------
+ Process  AT  BT  Pri  CT  TAT   WT   RT
+ P1        0   8    3   8    8    0    0
+ P2        1   4    1  12   11    7    7
+ P3        2   9    4  21   19   10   10
+ P4        3   5    2  26   23   18   18
+ Average TAT =  15.25 | Average WT =   8.75 | Average RT =   8.75
+
+Gantt Chart (SJF - Non-Preemptive):
+|  P1 (0-8)  |  P2 (8-12)  |  P4 (12-17)  |  P3 (17-26)  |
+-----------------------------------------------------------------------
+ Algorithm: Shortest Job First (SJF - Non-Preemptive)
+-----------------------------------------------------------------------
+ Process  AT  BT  Pri  CT  TAT   WT   RT
+ P1        0   8    3   8    8    0    0
+ P2        1   4    1  12   11    7    7
+ P3        2   9    4  26   24   15   15
+ P4        3   5    2  17   14    9    9
+ Average TAT =  14.25 | Average WT =   7.75 | Average RT =   7.75
+
+Gantt Chart (SRTF - Preemptive SJF):
+|  P1 (0-1)  |  P2 (1-5)  |  P4 (5-10)  |  P1 (10-17)  |  P3 (17-26)  |
+-----------------------------------------------------------------------
+ Algorithm: Shortest Remaining Time First (SRTF)
+-----------------------------------------------------------------------
+ Process  AT  BT  Pri  CT  TAT   WT   RT
+ P1        0   8    3  17   17    9    0
+ P2        1   4    1   5    4    0    0
+ P3        2   9    4  26   24   15   15
+ P4        3   5    2  10    7    2    2
+ Average TAT =  13.00 | Average WT =   6.50 | Average RT =   4.25
+
+Gantt Chart (Priority - Non-Preemptive):
+|  P1 (0-8)  |  P2 (8-12)  |  P4 (12-17)  |  P3 (17-26)  |
+-----------------------------------------------------------------------
+ Algorithm: Priority Scheduling (Non-Preemptive)
+-----------------------------------------------------------------------
+ Process  AT  BT  Pri  CT  TAT   WT   RT
+ P1        0   8    3   8    8    0    0
+ P2        1   4    1  12   11    7    7
+ P3        2   9    4  26   24   15   15
+ P4        3   5    2  17   14    9    9
+ Average TAT =  14.25 | Average WT =   7.75 | Average RT =   7.75
+
+INTERPRETATION:
+- SRTF achieves the absolute minimum average turnaround time (13.00) and waiting time (6.50).
+- P2 (short video job, burst 4) achieves optimal 0 ms waiting time under SRTF, preempting P1.
+- Round Robin (q=3) ensures fairness with no starvation, providing RT=0, 2, 4, 6 for all interactive tasks.

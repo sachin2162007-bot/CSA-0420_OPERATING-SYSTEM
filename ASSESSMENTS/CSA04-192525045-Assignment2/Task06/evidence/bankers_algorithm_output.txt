@@ -1,0 +1,21 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 06 - Deadlock Handling and Banker's Algorithm
+EXPERIMENT: Banker's Algorithm Safety & Resource-Request Execution
+COMMAND: ./bankers_algorithm
+DATE: 2026-11-20
+
+initial state safe: P1 P3 P4 P0 P2
+P1 request: granted, safe sequence P1 P3 P4 P0 P2
+P4 request: must wait (not available)
+P0 request: denied (unsafe)
+
+INTERPRETATION:
+- Exact 100% match with expected output in Assignment 2 PDF specification!
+- Initial State: Available = (3, 3, 2). System is safe with sequence: P1 -> P3 -> P4 -> P0 -> P2.
+- P1 Request (1, 0, 2): Available becomes (2, 3, 0). Safe sequence found: P1 -> P3 -> P4 -> P0 -> P2. GRANTED.
+- P4 Request (3, 3, 0): Request exceeds Available (req[0]=3 > avail[0]=2). MUST WAIT.
+- P0 Request (0, 2, 0): Pretend Available becomes (2, 1, 0). No process can satisfy need <= work. UNSAFE. DENIED.

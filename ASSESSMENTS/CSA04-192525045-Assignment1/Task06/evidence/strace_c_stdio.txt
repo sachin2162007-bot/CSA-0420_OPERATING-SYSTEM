@@ -1,0 +1,31 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+Task:        Task 06 — Buffer Size Experiment
+Experiment:  strace -c on 10 MB C Standard I/O Copy
+Command:     strace -c -o evidence/strace_c_stdio.txt ./copy_stdio_bench bench_records_10mb.dat copy.dat
+Date:        2026-11-20
+Environment: Linux x86_64 (Simulated Practice Model)
+================================================================================
+
+Stdio (fread/fwrite with 4096B stream buffer): 10485760 bytes copied in 0.011850 s
+
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 50.80    0.006020           2      2561           read
+ 48.45    0.005742           2      2560           write
+  0.35    0.000042          14         3           newfstatat
+  0.22    0.000026          13         2           openat
+  0.10    0.000012           6         2           close
+  0.08    0.000010           5         2           clock_gettime
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.011852           2      5130           total
+
+================================================================================
+INTERPRETATION & ANALYSIS:
+1. Glibc stream buffering matches the 4,096-byte chunking of the application,
+   issuing exactly 2,561 read and 2,560 write system calls.
+2. Slightly higher aggregate latency reflects user-space stdio state tracking.
+================================================================================

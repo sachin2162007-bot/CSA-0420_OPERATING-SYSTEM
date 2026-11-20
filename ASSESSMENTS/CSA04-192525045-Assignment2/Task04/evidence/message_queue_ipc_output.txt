@@ -1,0 +1,16 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 04 - Inter-Process Communication
+EXPERIMENT: POSIX Message Queue IPC
+COMMAND: ./message_queue_ipc
+DATE: 2026-11-20
+
+mq-analyser: 6 readings, average 35.5, max 41 (message queue IPC)
+mq-reader: done
+
+INTERPRETATION:
+- POSIX Message Queues provide kernel-managed, priority-ordered structured messaging.
+- Requires explicit sentinel message (-1) or EOF notification.

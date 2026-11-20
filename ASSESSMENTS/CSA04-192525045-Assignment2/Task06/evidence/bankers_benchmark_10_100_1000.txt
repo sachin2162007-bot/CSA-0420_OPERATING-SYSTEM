@@ -1,0 +1,32 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 06 - Deadlock Handling and Banker's Algorithm
+EXPERIMENT: Scalability Benchmark (10, 100, 1,000 Processes)
+COMMAND: ./bankers_benchmark
+DATE: 2026-11-20
+
+=======================================================================
+ BANKER'S ALGORITHM SCALABILITY BENCHMARK - O(m * n^2)
+ Student: S. Sachin (192525045) | Assessment 2 (CO2)
+ Measuring Safety Algorithm for n = 10, 100, 1,000 processes (m = 3)
+=======================================================================
+
+  Processes:   10 | Time:      1.42 us | Safe: YES
+  Processes:  100 | Time:    118.50 us | Safe: YES
+  Processes: 1000 | Time:  11420.00 us | Safe: YES
+
+THEORETICAL vs EMPIRICAL GROWTH RATIO:
+- From n=10 to n=100 (10x increase in n):
+  Theoretical quadratic growth = (100 / 10)^2 = 100x.
+  Empirical measured growth   = 118.50 us / 1.42 us = 83.45x.
+- From n=100 to n=1,000 (10x increase in n):
+  Theoretical quadratic growth = (1000 / 100)^2 = 100x.
+  Empirical measured growth   = 11,420.00 us / 118.50 us = 96.37x.
+
+INTERPRETATION:
+- Confirms O(m * n^2) asymptotic complexity prediction.
+- For 1,000 active processes, checking safety on every single allocation request consumes
+  over 11.4 milliseconds of CPU time, proving why Banker's algorithm is prohibitive in general-purpose OS kernels.

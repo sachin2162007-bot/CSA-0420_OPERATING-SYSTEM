@@ -1,0 +1,74 @@
+===============================================================================
+TASK 04: VIRTUAL MEMORY AND DEMAND PAGING - RESULTS AND OBSERVATIONS
+Student: S. Sachin | Register Number: 192525045 | Course: CSA04 CO3
+===============================================================================
+
+1. DEMAND PAGING EAT EVALUATION [THEORETICAL RESULT]
+-------------------------------------------------------------------------------
+Fault Rate p: 1 in 1000       (p =  0.00100000) | EAT:    8099.90 ns | Slowdown: 7999.90%
+Fault Rate p: 1 in 100000     (p =  0.00001000) | EAT:     180.00 ns | Slowdown:   80.00%
+Fault Rate p: 1 in 1000000    (p =  0.00000100) | EAT:     108.00 ns | Slowdown:    8.00%
+
+10% Slowdown Threshold:
+  Max Allowable Page Fault Rate: p <= 0.0000012500 (1 in 799,990 accesses)
+
+2. SEQUENTIAL VS RANDOM MEMORY ACCESS BENCHMARK [ILLUSTRATIVE SAMPLE OUTPUT]
+-------------------------------------------------------------------------------
+Sequential Access (32 MB Buffer):
+  [Initial State]             Minor Faults: 110 | Major Faults: 0 | RSS:  2400 KB
+  [After calloc]              Minor Faults: 115 | Major Faults: 0 | RSS:  2412 KB
+  [After Sequential Access]   Minor Faults: 8307 | Major Faults: 0 | RSS: 35200 KB
+  Sequential Pass Duration:   18.420 ms
+  Observation: Linear streaming maximizes hardware prefetching and page hit rate.
+
+Random Stride Access (32 MB Buffer):
+  [Initial State]             Minor Faults: 110 | Major Faults: 0 | RSS:  2400 KB
+  [After malloc]              Minor Faults: 112 | Major Faults: 0 | RSS:  2408 KB
+  [After Random Access]       Minor Faults: 8305 | Major Faults: 0 | RSS: 35190 KB
+  Random Access Pass Duration: 64.810 ms (3.5x slower than sequential streaming!)
+  Observation: Page striding causes constant TLB evictions and cache-line stalls.
+
+3. COPY-ON-WRITE fork() OBSERVATION [EXPECTED OUTPUT]
+-------------------------------------------------------------------------------
+[PARENT] Allocating and populating 16 MB data buffer...
+[PARENT] Buffer initialized. Parent RSS: 16840 KB
+[PARENT] Calling fork()...
+
+  [CHILD] Created with PID 4120.
+  [CHILD] Before write: Child shares physical pages. Child RSS: 16840 KB
+  [CHILD] Modifying 1 byte in buffer (data[0] = 'Z')...
+  [CHILD] After 1-byte write: Only 1 page (4 KB) was duplicated by kernel!
+  [CHILD] Child RSS: 16844 KB
+  [CHILD] Modifying entire buffer (Dirtying all pages)...
+  [CHILD] After full buffer write: All 16 MB pages duplicated. Child RSS: 33240 KB
+  [CHILD] Completed successfully.
+
+[PARENT] Child has terminated. Parent data[0] = 'A' (Unchanged!).
+[PARENT] COW verified: Parent memory remained isolated throughout.
+
+4. PAGE FAULTS VS FRAMES SIMULATION [ILLUSTRATIVE SAMPLE OUTPUT]
+-------------------------------------------------------------------------------
+Frames   | FIFO Faults  | LRU Faults   | Fault Rate Reduction
+------------------------------------------------------------------
+2        | 18           | 18           | -0.0%
+3        | 16           | 15           | -16.7%
+4        | 14           | 12           | -20.0%
+5        | 10           | 9            | -25.0%
+6        | 8            | 7            | -22.2%
+7        | 7            | 7            | -0.0%
+8        | 7            | 7            | -0.0%
+------------------------------------------------------------------
+Observation: Fault rate stabilizes at frame count = 6, indicating the program's
+working set size is 6 pages. Adding frames beyond 6 yields diminishing returns.
+
+5. FINAL RECOMMENDATION FOR THE RADIOLOGIST
+-------------------------------------------------------------------------------
+Recommendation: **A Hybrid Approach with Primary Hardware Upgrade to 32 GB RAM**.
+1. **Primary Solution (Upgrade to 32 GB RAM):**
+   At a minor hardware cost ($100-$150), upgrading RAM to 32 GB completely fits the
+   24 GB dataset into physical memory, guaranteeing 0 page faults and sub-100 ns EAT.
+2. **Secondary Software Optimization (Tiling / Locality):**
+   Refactoring image algorithms to process volumetric data in 3D sub-blocks (tiles)
+   maintains a compact working set, ensuring the application remains responsive even
+   when multitasking.
+===============================================================================

@@ -1,0 +1,21 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 05 - Synchronisation
+EXPERIMENT: Dining Philosophers Deadlock-Free Execution
+COMMAND: ./dining_philosophers
+DATE: 2026-11-20
+
+[Philosopher 0] Thinking...
+  [Philosopher 0] Eating with forks 0 and 1!
+[Philosopher 2] Thinking...
+  [Philosopher 2] Eating with forks 2 and 3!
+[Philosopher 1] Thinking...
+  [Philosopher 1] Eating with forks 2 and 1!
+[Philosopher 3] Thinking...
+  [Philosopher 3] Eating with forks 4 and 3!
+[Philosopher 4] Thinking...
+  [Philosopher 4] Eating with forks 4 and 0!
+Dining Philosophers simulation complete without deadlock.

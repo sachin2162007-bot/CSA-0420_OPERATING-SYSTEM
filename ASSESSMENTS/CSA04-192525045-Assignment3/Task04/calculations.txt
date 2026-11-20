@@ -1,0 +1,76 @@
+===============================================================================
+TASK 04: VIRTUAL MEMORY AND DEMAND PAGING - WORKINGS AND PROOFS
+Student: S. Sachin | Register Number: 192525045 | Course: CSA04 CO3
+===============================================================================
+
+1. EFFECTIVE ACCESS TIME (EAT) FORMULA & DERIVATIONS
+-------------------------------------------------------------------------------
+Parameters:
+  Memory Access Time (t_mem): 100 ns
+  Page Fault Service Time (t_fault): 8 ms = 8,000,000 ns
+  Page Fault Rate: p (0 <= p <= 1)
+
+Mathematical Formula:
+  EAT = (1 - p) * t_mem + p * t_fault
+      = (1 - p) * 100 + p * 8,000,000
+      = 100 - 100p + 8,000,000p
+      = 100 + 7,999,900 * p (in nanoseconds)
+
+Case 1: p = 1 / 1,000 = 0.001
+  EAT = 100 + 7,999,900 * 0.001
+      = 100 + 7,999.9 = 8,099.9 ns = 8.10 microseconds
+  Slowdown Factor = 8,099.9 / 100 = 80.999x slowdown (Over 8,000% penalty!)
+
+Case 2: p = 1 / 100,000 = 0.00001
+  EAT = 100 + 7,999,900 * 0.00001
+      = 100 + 79.999 = 179.999 ns approx 180 ns
+  Slowdown Factor = 180 / 100 = 1.80x slowdown (80% performance loss).
+
+Case 3: p = 1 / 1,000,000 = 0.000001
+  EAT = 100 + 7,999,900 * 0.000001
+      = 100 + 7.9999 = 107.9999 ns approx 108 ns
+  Slowdown Factor = 108 / 100 = 1.08x slowdown (8% performance loss).
+
+-------------------------------------------------------------------------------
+2. THRESHOLD PAGE FAULT RATE FOR MAXIMUM 10% SLOWDOWN
+-------------------------------------------------------------------------------
+Requirement: EAT <= 1.10 * t_mem = 110 ns.
+Equation:
+  100 + 7,999,900 * p <= 110
+  7,999,900 * p <= 10
+  p <= 10 / 7,999,900
+  p <= 0.0000012500156 (1.25 * 10^-6)
+
+Reciprocal:
+  1 / p >= 799,990 accesses.
+Conclusion:
+  To maintain a degradation below 10%, the operating system must not exceed
+  ONE page fault per 800,000 memory accesses!
+
+-------------------------------------------------------------------------------
+3. RADIOLOGIST LAPTOP MEMORY CAPACITY ANALYSIS
+-------------------------------------------------------------------------------
+Hardware & Workload Parameters:
+  Laptop Physical RAM: 16 GB (approx 14 GB usable for applications)
+  Medical Imaging Software Demand: 24 GB working set
+  Deficit: 24 GB - 14 GB = 10 GB must reside in swap / backing store.
+
+Scenario Analysis:
+  1. If Program has High Locality (Slice-by-Slice Processing):
+     - The radiologist processes one 2D axial slice of 500 MB at a time.
+     - Working Set W(t, Delta) = 500 MB to 2 GB << 14 GB RAM.
+     - Demand paging seamlessly faults in slices with p < 10^-6.
+     - Software operates at near DRAM speeds (108 ns EAT).
+  
+  2. If Program has Low Locality (Global 3D Isosurface Raytracing):
+     - Ray queries jump non-linearly across the entire 24 GB voxel array.
+     - Working Set = 24 GB > 14 GB RAM.
+     - Thrashing: Every raycast induces page faults (p > 10^-3).
+     - EAT explodes to 8.1 microseconds (81x slowdown).
+     - Execution time extends from 5 minutes to 6.7 hours!
+
+Economic Evaluation:
+  - Improving Locality: Free software refactor (tiled matrix layout / Morton z-curve).
+  - Upgrading to 32 GB RAM: $120 hardware cost completely eliminates paging overhead,
+    delivering deterministic sub-microsecond rendering regardless of access pattern.
+===============================================================================

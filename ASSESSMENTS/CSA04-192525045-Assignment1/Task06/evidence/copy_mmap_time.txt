@@ -1,0 +1,30 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+Task:        Task 06 — Buffer Size Experiment
+Experiment:  Memory-Mapped (mmap + memcpy) 10 MB Copy Benchmark
+Command:     ./copy_mmap_bench bench_records_10mb.dat copy.dat
+Date:        2026-11-20
+Environment: Linux x86_64 (Simulated Practice Model)
+================================================================================
+
+Benchmark Input File: bench_records_10mb.dat (10,485,760 bytes = 10.00 MB)
+mmap (memory-mapped copy): 10485760 bytes copied in 0.004950 s
+Achieved Throughput: 2,020.20 MB/s
+
+Operations Breakdown:
+- mmap() calls: 2 (1 for source, 1 for destination)
+- memcpy() operations: 1 contiguous block transfer
+- read() system calls: 0
+- write() system calls: 0
+- msync() call: 1 (synchronous dirty page flush)
+
+================================================================================
+INTERPRETATION & COMPARISON:
+1. Memory mapping outperforms 4 KB raw copy by 1.9x (0.004950 s vs 0.009420 s).
+2. mmap eliminates user/kernel buffer copying; page frames in the kernel page
+   cache are directly mapped to user virtual addresses via page table entries.
+3. System call overhead during data transfer is ZERO.
+================================================================================

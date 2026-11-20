@@ -1,0 +1,18 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 04 - Inter-Process Communication
+EXPERIMENT: UNIX Pipe IPC Implementation
+COMMAND: ./pipe_ipc
+DATE: 2026-11-20
+
+analyser: 6 readings, average 35.5, max 41
+reader: done
+
+INTERPRETATION:
+- Exact 100% match with expected output in Assignment 2 PDF specification!
+- Readings: {31, 33, 36, 34, 41, 38}.
+- Count = 6, Sum = 213, Average = 213 / 6 = 35.5, Maximum = 41.
+- Signals EOF to child when parent closes fd[1], causing read() in child to return 0.

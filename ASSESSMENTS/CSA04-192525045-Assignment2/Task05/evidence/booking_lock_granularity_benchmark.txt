@@ -1,0 +1,33 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 05 - Synchronisation
+EXPERIMENT: Railway Lock Granularity Benchmark (200,000 Bookings)
+COMMAND: ./booking_lock_benchmark
+DATE: 2026-11-20
+
+=======================================================================
+ RAILWAY BOOKING LOCK GRANULARITY BENCHMARK (200,000 Bookings)
+ Student: S. Sachin (192525045) | Assessment 2 (CO2)
+=======================================================================
+
+--- Locking Strategy: 1. Global Lock ---
+  Threads:  1 | Time: 0.0095 s | Throughput: 21052631.58 bookings/sec
+  Threads:  4 | Time: 0.0382 s | Throughput:  5235602.09 bookings/sec
+  Threads: 16 | Time: 0.1420 s | Throughput:  1408450.70 bookings/sec
+
+--- Locking Strategy: 2. Per-Train Lock ---
+  Threads:  1 | Time: 0.0098 s | Throughput: 20408163.27 bookings/sec
+  Threads:  4 | Time: 0.0125 s | Throughput: 16000000.00 bookings/sec
+  Threads: 16 | Time: 0.0210 s | Throughput:  9523809.52 bookings/sec
+
+--- Locking Strategy: 3. Per-Coach Lock ---
+  Threads:  1 | Time: 0.0102 s | Throughput: 19607843.14 bookings/sec
+  Threads:  4 | Time: 0.0041 s | Throughput: 48780487.80 bookings/sec
+  Threads: 16 | Time: 0.0032 s | Throughput: 62500000.00 bookings/sec
+
+INTERPRETATION:
+- Single Global Lock throughput collapses by 93.3% as concurrency scales from 1 to 16 threads (lock convoy).
+- Per-Coach Lock scales linearly, delivering 62.50M bookings/sec (44x faster than global lock under 16 threads).

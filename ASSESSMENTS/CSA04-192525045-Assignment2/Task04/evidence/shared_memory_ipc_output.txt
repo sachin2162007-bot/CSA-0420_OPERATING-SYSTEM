@@ -1,0 +1,17 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 04 - Inter-Process Communication
+EXPERIMENT: POSIX Shared Memory IPC with Semaphores
+COMMAND: ./shared_memory_ipc
+DATE: 2026-11-20
+
+shm-analyser: 6 readings, average 35.5, max 41 (zero-copy shared memory)
+shm-reader: done
+
+INTERPRETATION:
+- Shared memory maps physical memory frames directly into both parent and child virtual address spaces.
+- Data transfer involves ZERO kernel-buffer copies (compared to 2 copies in UNIX pipes).
+- Synchronization handled explicitly via POSIX process-shared semaphores.

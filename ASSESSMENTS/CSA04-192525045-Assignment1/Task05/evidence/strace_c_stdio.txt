@@ -1,0 +1,35 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+Task:        Task 05 — System Calls
+Experiment:  C Standard I/O (fread/fwrite) Copy (Syscall Summary)
+Command:     strace -c -o evidence/strace_c_stdio.txt ./copy_stdio records.dat copy.dat
+Date:        2026-11-20
+Environment: Linux x86_64 (Simulated Practice Model)
+================================================================================
+
+Stdio copy finished: 10000 bytes copied, 4 fread() calls, 3 fwrite() calls
+
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 34.12    0.000135          33         4           read
+ 29.85    0.000118          39         3           write
+ 14.20    0.000056          18         3           newfstatat
+ 10.15    0.000040          20         2           openat
+  6.10    0.000024          12         2           close
+  3.18    0.000013           6         2           brk
+  2.40    0.000009           9         1           mprotect
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000395          23        17           total
+
+================================================================================
+INTERPRETATION & ANALYSIS:
+1. The C standard library (glibc) automatically allocates a 4,096-byte buffer in
+   user space for each open FILE stream.
+2. The fread() and fwrite() library calls issue underlying read() and write()
+   system calls in 4,096-byte blocks, yielding exactly 4 reads and 3 writes.
+3. Extra newfstatat() calls reflect glibc querying block size (st_blksize=4096)
+   to optimize stream buffer sizing automatically.
+================================================================================

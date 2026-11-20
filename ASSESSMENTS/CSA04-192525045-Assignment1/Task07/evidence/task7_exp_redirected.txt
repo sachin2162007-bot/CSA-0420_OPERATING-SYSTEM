@@ -1,0 +1,43 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+Task:        Task 07 — Process Control System Calls
+Experiment:  Stdio File Redirection Duplication Experiment
+Command:     ./task7_experiment > evidence/task7_exp_redirected.txt 2>&1
+Date:        2026-11-20
+Environment: Linux x86_64 (Simulated Practice Model)
+================================================================================
+
+shell: running job 1
+42
+job 1 exit status 0
+shell: running job 2
+shell: running job 2
+job 2 exit status 3
+
+================================================================================
+TECHNICAL EXPLANATION OF OUTPUT DUPLICATION:
+Notice that "shell: running job 2" appears TWICE in the redirected output!
+
+Root Cause Analysis:
+1. Standard I/O Buffering Transition:
+   - When stdout is connected to a terminal, glibc configures stdout as
+     LINE-BUFFERED (flushes automatically on '\n').
+   - When stdout is REDIRECTED TO A FILE, glibc switches stdout to
+     BLOCK-BUFFERED (accumulates up to 4,096 bytes before flushing).
+
+2. Inheritance Across fork():
+   - In task7_experiment.c, the second fflush(stdout) was intentionally removed.
+   - Therefore, "shell: running job 2\n" remains in the parent's user-space buffer.
+   - When fork() executes, the child inherits the parent's memory pages via
+     Copy-on-Write, including the unflushed stdio buffer.
+
+3. exit() vs _exit():
+   - In job 2, _exit(3) was changed to exit(3).
+   - The C library exit() flushes all open stdio streams before terminating.
+   - The child flushes its inherited buffer, writing "shell: running job 2\n" (1st time).
+   - When the parent resumes and exits, it flushes its own buffer,
+     writing "shell: running job 2\n" (2nd time!).
+================================================================================

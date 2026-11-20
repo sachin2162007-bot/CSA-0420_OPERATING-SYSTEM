@@ -1,0 +1,24 @@
+================================================================================
+SIMULATED DEMONSTRATION OUTPUT
+Not actual Linux execution evidence.
+Generated for practice and demonstration purposes.
+================================================================================
+TASK: Task 06 - Deadlock Handling and Banker's Algorithm
+EXPERIMENT: Deadlock Conditions Demonstration
+COMMAND: ./deadlock_demo
+DATE: 2026-11-20
+
+Demonstrating 4 Deadlock Conditions (Simulation with Timeout)...
+1. Mutual Exclusion: GPU & License can only be held by 1 job
+2. Hold and Wait: Job 1 holds GPU & waits for License; Job 2 holds License & waits for GPU
+3. No Preemption: Mutexes cannot be forcibly reclaimed
+4. Circular Wait: Job 1 -> License -> Job 2 -> GPU -> Job 1
+
+[JOB 1] Acquiring GPU...
+[JOB 1] Acquired GPU. Holding GPU and sleeping...
+  [JOB 2] Acquiring Simulation License...
+  [JOB 2] Acquired License. Holding License and sleeping...
+[JOB 1] Now requesting Simulation License (holds GPU, waits for License)...
+  [JOB 2] Now requesting GPU (holds License, waits for GPU)...
+
+*** DEADLOCK DETECTED! Both threads are blocked indefinitely in circular wait. ***

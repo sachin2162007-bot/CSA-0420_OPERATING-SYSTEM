@@ -1,0 +1,86 @@
+===============================================================================
+TASK 06: DISK MANAGEMENT AND RAID ARCHITECTURE - MATHEMATICAL WORKINGS
+Student: S. Sachin | Register Number: 192525045 | Course: CSA04 CO3
+===============================================================================
+
+1. USABLE STORAGE CAPACITY FOR 6 DISKS x 4 TB (TOTAL RAW = 24 TB)
+-------------------------------------------------------------------------------
+Disks N = 6, Capacity per disk C = 4 TB. Total Raw = 6 * 4 TB = 24 TB.
+
+1. RAID 0 (Striping):
+   Formula: C_usable = N * C
+   Calculation: 6 * 4 TB = 24 TB
+   Efficiency: 24 / 24 = 100%
+   Fault Tolerance: 0 disks (Failure of ANY disk destroys entire array).
+
+2. RAID 1 (Mirrored Pairs - 3 sets of 2 disks):
+   Formula: C_usable = (N / 2) * C
+   Calculation: (6 / 2) * 4 TB = 3 * 4 TB = 12 TB
+   Efficiency: 12 / 24 = 50.0%
+   Fault Tolerance: Survives 1 disk failure per mirror pair (up to 3 disks total).
+
+3. RAID 5 (Block-level Striping with Distributed Single Parity):
+   Formula: C_usable = (N - 1) * C
+   Calculation: (6 - 1) * 4 TB = 5 * 4 TB = 20 TB
+   Parity Overhead: 1 disk equivalent = 4 TB (16.7%)
+   Efficiency: 20 / 24 = 83.33%
+   Fault Tolerance: 1 disk failure.
+
+4. RAID 6 (Block-level Striping with Dual Distributed Parity P+Q):
+   Formula: C_usable = (N - 2) * C
+   Calculation: (6 - 2) * 4 TB = 4 * 4 TB = 16 TB
+   Parity Overhead: 2 disks equivalent = 8 TB (33.3%)
+   Efficiency: 16 / 24 = 66.67%
+   Fault Tolerance: 2 concurrent disk failures.
+
+5. RAID 10 (Striped Mirrors 1+0):
+   Formula: C_usable = (N / 2) * C
+   Calculation: (6 / 2) * 4 TB = 12 TB
+   Parity Overhead: 12 TB (50.0%)
+   Efficiency: 12 / 24 = 50.0%
+   Fault Tolerance: Survives 1 disk failure per mirrored pair (up to 3 disks total).
+
+-------------------------------------------------------------------------------
+2. RELIABILITY AND DATA LOSS PROBABILITY DURING DISK REBUILD
+-------------------------------------------------------------------------------
+Parameters:
+  Annual Failure Rate (AFR) = 3% = 0.03 per drive per year.
+  Rebuild Duration (T_rebuild) = 24 hours = 24 / 8,760 = 0.0027397 years.
+  Probability of an individual surviving drive failing during the rebuild window:
+    p_window = AFR * T_rebuild = 0.03 * (24 / 8760) = 0.00008219 (8.22 * 10^-5)
+
+Case A: RAID 5 Data Loss Probability
+  - Array has 1 failed drive; 5 drives remain operational.
+  - Catastrophic data loss occurs if ANY of the 5 operational drives fails during rebuild.
+  - Formula: P_loss = 1 - (1 - p_window)^5
+  - Calculation:
+      (1 - p_window)^5 = (1 - 0.00008219)^5 = (0.99991781)^5 approx 0.999589
+      P_loss = 1 - 0.999589 = 0.00041088 (0.0411% or approx 1 in 2,434 rebuilds).
+
+Case B: RAID 10 Data Loss Probability
+  - Array has 1 failed drive; 5 drives remain operational.
+  - However, data loss occurs ONLY if the SPECIFIC mirror partner of the failed drive fails.
+  - The other 4 drives are in different mirror pairs and do NOT cause array collapse!
+  - Formula: P_loss = p_window = 0.00008219 (0.0082% or approx 1 in 12,166 rebuilds).
+  - Comparative Finding: RAID 10 is 5x less likely to collapse during rebuild than RAID 5!
+
+Case C: RAID 6 Data Loss Probability
+  - Array has dual parity; can tolerate a second failure.
+  - Catastrophic loss requires TWO additional drives failing during the 24-hr rebuild:
+  - Formula: P_loss ≈ (5 * 4 / 2) * (p_window)^2 = 10 * (8.22 * 10^-5)^2 = 6.75 * 10^-8
+  - Comparative Finding: RAID 6 is over 6,000x safer than RAID 5!
+
+-------------------------------------------------------------------------------
+3. WRITE PENALTY ANALYSIS
+-------------------------------------------------------------------------------
+Write Penalty measures the physical disk I/O operations required for 1 logical random write:
+- RAID 0: 1 I/O operation (Direct write, zero penalty).
+- RAID 1 / 10: 2 I/O operations (Write data to Primary, Write data to Mirror).
+- RAID 5: 4 I/O operations:
+    1. Read old data
+    2. Read old parity
+    3. Calculate new parity: P_new = (D_old XOR D_new) XOR P_old
+    4. Write new data
+    5. Write new parity
+- RAID 6: 6 I/O operations (Read old D, Read old P, Read old Q, Write new D, Write new P, Write new Q).
+===============================================================================
