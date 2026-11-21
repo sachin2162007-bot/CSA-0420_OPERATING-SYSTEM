@@ -1,0 +1,41 @@
+##### node is full (950m of 1000m requested): notice-service was Pending -> scale portal 3 -> 2 on this 1-CPU node
+  Warning  FailedScheduling  2m26s  default-scheduler  0/1 nodes are available: 1 Insufficient cpu. preemption: 0/1 nodes are available: 1 N
+deployment.apps/result-portal scaled
+Waiting for deployment "notice-service" rollout to finish: 0 of 1 updated replicas are available...
+deployment "notice-service" successfully rolled out
+
+##### kubectl get pods,deployments,services
+NAME                              READY   STATUS    RESTARTS   AGE     IP           NODE   NOMINATED NODE   READINESS GATES
+notice-service-755cfc6c45-8v2qw   1/1     Running   0          2m29s   10.42.0.57   vm     <none>           <none>
+result-portal-86c9577d7f-frxhq    1/1     Running   0          3m30s   10.42.0.55   vm     <none>           <none>
+result-portal-86c9577d7f-zlpcx    1/1     Running   0          3m30s   10.42.0.56   vm     <none>           <none>
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+notice-service   1/1     1            1           2m29s
+result-portal    2/2     2            2           3m30s
+NAME             TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+kubernetes       ClusterIP      10.43.0.1      <none>        443/TCP        18m
+notice-service   ClusterIP      10.43.65.253   <none>        80/TCP         2m29s
+result-portal    LoadBalancer   10.43.3.77     192.0.2.2     80:31723/TCP   7m50s
+
+##### both respond
+portal /health:
+{"status":"ok"}
+notice /notices:
+{"notices":[{"id":1,"text":"Semester results are published on the result portal."},{"id":2,"text":"Online examination timetable is available in the LMS."}]}
+whoami in notice pod: notice
+
+##### describe: requests/limits per service
+    Limits:
+      cpu:     200m
+      memory:  256Mi
+    Requests:
+      cpu:        100m
+      memory:     128Mi
+
+##### node allocation
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests     Limits
+  --------           --------     ------
+  cpu                800m (80%)   1200m (120%)
+  memory             780Mi (19%)  1450Mi (36%)

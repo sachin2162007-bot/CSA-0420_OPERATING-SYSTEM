@@ -1,0 +1,37 @@
+# Result portal + PostgreSQL. Run:  docker compose up -d --build
+# Passwords below are for a classroom demo only; use secrets for a real deployment.
+services:
+  portal:
+    build: .
+    image: result-portal
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://portal:portal_demo_pw@db:5432/results
+    depends_on:
+      db:
+        condition: service_healthy
+    cpus: "0.50"        # at most half of one CPU core
+    mem_limit: 256m     # hard memory limit (cgroup memory.max)
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: portal
+      POSTGRES_PASSWORD: portal_demo_pw
+      POSTGRES_DB: results
+    volumes:
+      - pgdata:/var/lib/postgresql/data                      # named volume: data survives container removal
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    cpus: "0.50"
+    mem_limit: 256m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portal -d results"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  pgdata:

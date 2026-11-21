@@ -1,0 +1,15 @@
+EXPECTED RESULT FROM THE OFFICIAL PDF (page 47) - NOT AN EXECUTION RESULT
+-------------------------------------------------------------------------
+- docker build -t result-portal .   : the image builds without errors
+- docker ps                          : the container is shown running
+- http://localhost:8000              : shows the portal
+- docker images                      : record the image size       (value: PENDING - not measured)
+- docker exec <container> whoami     : portal
+
+ACTUAL RESULT IN THIS SUBMISSION
+--------------------------------
+Build not possible in the sandbox: Docker Hub (registry-1.docker.io) could not be reached, so
+python:3.12-slim could not be downloaded. See docker_commands.md section 1 for the real error output.
+All of the above items are PENDING until capture_evidence.sh is run on a machine with Docker and
+Internet access. What WAS verified: app.py served by gunicorn as user "portal" (outside Docker),
+docker-compose.yml validated with `docker compose config -q`.

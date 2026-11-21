@@ -1,0 +1,119 @@
+
+===== kubectl apply -f deployment.yaml =====
+deployment.apps/result-portal created
+service/result-portal created
+Waiting for deployment "result-portal" rollout to finish: 0 of 3 updated replicas are available...
+Waiting for deployment "result-portal" rollout to finish: 1 of 3 updated replicas are available...
+Waiting for deployment "result-portal" rollout to finish: 2 of 3 updated replicas are available...
+deployment "result-portal" successfully rolled out
+
+===== kubectl get pods / deployments / services =====
+NAME                             READY   STATUS    RESTARTS   AGE   IP           NODE   NOMINATED NODE   READINESS GATES
+result-portal-86c9577d7f-cgww4   1/1     Running   0          2s    10.42.0.44   vm     <none>           <none>
+result-portal-86c9577d7f-jrx7n   1/1     Running   0          2s    10.42.0.43   vm     <none>           <none>
+result-portal-86c9577d7f-vp42h   1/1     Running   0          2s    10.42.0.45   vm     <none>           <none>
+NAME            READY   UP-TO-DATE   AVAILABLE   AGE
+result-portal   3/3     3            3           2s
+NAME            TYPE           CLUSTER-IP   EXTERNAL-IP   PORT(S)        AGE
+kubernetes      ClusterIP      10.43.0.1    <none>        443/TCP        10m
+result-portal   LoadBalancer   10.43.3.77   192.0.2.2     80:31723/TCP   2s
+
+===== kubectl describe pod (requests and limits) =====
+Name:             result-portal-86c9577d7f-cgww4
+Labels:           app=result-portal
+Status:           Running
+    Limits:
+      cpu:     500m
+      memory:  512Mi
+    Requests:
+      cpu:        250m
+      memory:     256Mi
+    Readiness:    http-get http://:8000/health delay=0s timeout=1s period=10s successThreshold=1 failureThreshold=3
+QoS Class:                   Burstable
+
+===== Delete one pod; Kubernetes must recreate it =====
+07:03:44.843684376
+pod "result-portal-86c9577d7f-cgww4" deleted from default namespace
+result-portal-86c9577d7f-cgww4   1/1   Terminating   0     2s
+result-portal-86c9577d7f-jrx7n   1/1   Running       0     2s
+result-portal-86c9577d7f-vp42h   1/1   Running       0     2s
+result-portal-86c9577d7f-zbst6   0/1   Pending       0     0s
+--- t+1s
+result-portal-86c9577d7f-cgww4   1/1   Terminating   0     4s
+result-portal-86c9577d7f-jrx7n   1/1   Running       0     4s
+result-portal-86c9577d7f-vp42h   1/1   Running       0     4s
+result-portal-86c9577d7f-zbst6   0/1   Pending       0     2s
+--- t+2s
+result-portal-86c9577d7f-cgww4   0/1   Completed           0     5s
+result-portal-86c9577d7f-jrx7n   1/1   Running             0     5s
+result-portal-86c9577d7f-vp42h   1/1   Running             0     5s
+result-portal-86c9577d7f-zbst6   0/1   ContainerCreating   0     3s
+--- t+3s
+result-portal-86c9577d7f-jrx7n   1/1   Running   0     6s
+result-portal-86c9577d7f-vp42h   1/1   Running   0     6s
+result-portal-86c9577d7f-zbst6   1/1   Running   0     4s
+--- t+4s
+result-portal-86c9577d7f-jrx7n   1/1   Running   0     7s
+result-portal-86c9577d7f-vp42h   1/1   Running   0     7s
+result-portal-86c9577d7f-zbst6   1/1   Running   0     5s
+--- t+5s
+result-portal-86c9577d7f-jrx7n   1/1   Running   0     8s
+result-portal-86c9577d7f-vp42h   1/1   Running   0     8s
+result-portal-86c9577d7f-zbst6   1/1   Running   0     6s
+--- t+6s
+result-portal-86c9577d7f-jrx7n   1/1   Running   0     9s
+result-portal-86c9577d7f-vp42h   1/1   Running   0     9s
+result-portal-86c9577d7f-zbst6   1/1   Running   0     7s
+--- t+7s
+result-portal-86c9577d7f-jrx7n   1/1   Running   0     10s
+result-portal-86c9577d7f-vp42h   1/1   Running   0     10s
+result-portal-86c9577d7f-zbst6   1/1   Running   0     8s
+--- t+8s
+result-portal-86c9577d7f-jrx7n   1/1   Running   0     11s
+result-portal-86c9577d7f-vp42h   1/1   Running   0     11s
+result-portal-86c9577d7f-zbst6   1/1   Running   0     9s
+--- t+9s
+result-portal-86c9577d7f-jrx7n   1/1   Running   0     12s
+result-portal-86c9577d7f-vp42h   1/1   Running   0     12s
+result-portal-86c9577d7f-zbst6   1/1   Running   0     10s
+--- t+10s
+NAME                             READY   STATUS    RESTARTS   AGE
+result-portal-86c9577d7f-jrx7n   1/1     Running   0          13s
+result-portal-86c9577d7f-vp42h   1/1     Running   0          13s
+result-portal-86c9577d7f-zbst6   1/1     Running   0          11s
+
+===== Scale to 6 replicas while 20 s of load is running =====
+07:04:00
+deployment.apps/result-portal scaled
+result-portal   3/6   6     3     18s
+result-portal   3/6   6     3     22s
+result-portal   3/6   6     3     25s
+result-portal   3/6   6     3     28s
+result-portal   3/6   6     3     31s
+result-portal   3/6   6     3     34s
+Complete requests:      20
+Failed requests:        0
+Requests per second:    1.00 [#/sec] (mean)
+
+===== State after scaling to 6 =====
+NAME                             READY   STATUS    RESTARTS   AGE   IP           NODE     NOMINATED NODE   READINESS GATES
+result-portal-86c9577d7f-fxw7f   0/1     Pending   0          19s   <none>       <none>   <none>           <none>
+result-portal-86c9577d7f-jrx7n   1/1     Running   0          37s   10.42.0.43   vm       <none>           <none>
+result-portal-86c9577d7f-ss9lg   0/1     Pending   0          19s   <none>       <none>   <none>           <none>
+result-portal-86c9577d7f-tbp8l   0/1     Pending   0          19s   <none>       <none>   <none>           <none>
+result-portal-86c9577d7f-vp42h   1/1     Running   0          37s   10.42.0.45   vm       <none>           <none>
+result-portal-86c9577d7f-zbst6   1/1     Running   0          35s   10.42.0.46   vm       <none>           <none>
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests     Limits
+  --------           --------     ------
+  cpu                950m (95%)   1500m (150%)
+  memory             908Mi (22%)  1706Mi (42%)
+  ephemeral-storage  0 (0%)       0 (0%)
+  hugepages-1Gi      0 (0%)       0 (0%)
+  hugepages-2Mi      0 (0%)       0 (0%)
+Events:
+Events:
+  Type     Reason            Age   From               Message
+  ----     ------            ----  ----               -------
+  Warning  FailedScheduling  18s   default-scheduler  0/1 nodes are available: 1 Insufficient cpu. preemption: 0/1 nodes are available: 1 No preemption victims found for incoming pod.

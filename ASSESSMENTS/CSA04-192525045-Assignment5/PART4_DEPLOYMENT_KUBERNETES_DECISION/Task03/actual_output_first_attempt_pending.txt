@@ -1,0 +1,77 @@
+##### apply second service
+deployment.apps/notice-service created
+service/notice-service created
+Waiting for deployment "notice-service" rollout to finish: 0 out of 1 new replicas have been updated...
+Waiting for deployment "notice-service" rollout to finish: 0 of 1 updated replicas are available...
+error: timed out waiting for the condition
+
+##### kubectl get pods,deployments,services
+NAME                              READY   STATUS    RESTARTS   AGE    IP           NODE     NOMINATED NODE   READINESS GATES
+notice-service-755cfc6c45-8v2qw   0/1     Pending   0          2m     <none>       <none>   <none>           <none>
+result-portal-86c9577d7f-b4xkg    1/1     Running   0          3m1s   10.42.0.54   vm       <none>           <none>
+result-portal-86c9577d7f-frxhq    1/1     Running   0          3m1s   10.42.0.55   vm       <none>           <none>
+result-portal-86c9577d7f-zlpcx    1/1     Running   0          3m1s   10.42.0.56   vm       <none>           <none>
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+notice-service   0/1     1            0           2m
+result-portal    3/3     3            3           3m1s
+NAME             TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
+kubernetes       ClusterIP      10.43.0.1      <none>        443/TCP        18m
+notice-service   ClusterIP      10.43.65.253   <none>        80/TCP         2m
+result-portal    LoadBalancer   10.43.3.77     192.0.2.2     80:31723/TCP   7m21s
+
+##### resources of each service
+-- pod/notice-service-755cfc6c45-8v2qw
+    Limits:
+      cpu:     200m
+      memory:  256Mi
+    Requests:
+    Requests:
+      cpu:        100m
+      memory:     128Mi
+-- pod/result-portal-86c9577d7f-b4xkg
+    Limits:
+      cpu:     500m
+      memory:  512Mi
+    Requests:
+    Requests:
+      cpu:        250m
+      memory:     256Mi
+-- pod/result-portal-86c9577d7f-frxhq
+    Limits:
+      cpu:     500m
+      memory:  512Mi
+    Requests:
+    Requests:
+      cpu:        250m
+      memory:     256Mi
+-- pod/result-portal-86c9577d7f-zlpcx
+    Limits:
+      cpu:     500m
+      memory:  512Mi
+    Requests:
+    Requests:
+      cpu:        250m
+      memory:     256Mi
+
+##### both respond
+portal /health:
+{"status":"ok"}
+notice /notices:
+
+##### whoami in notice pod
+error: unable to upgrade connection: pod notice-service-755cfc6c45-8v2qw does not have a host assigned
+
+##### kubectl top (metrics-server)
+NAME                             CPU(cores)   MEMORY(bytes)   
+result-portal-86c9577d7f-b4xkg   1m           31Mi            
+result-portal-86c9577d7f-frxhq   1m           31Mi            
+result-portal-86c9577d7f-zlpcx   1m           31Mi            
+
+##### node allocation
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests     Limits
+  --------           --------     ------
+  cpu                950m (95%)   1500m (150%)
+  memory             908Mi (22%)  1706Mi (42%)
+  ephemeral-storage  0 (0%)       0 (0%)

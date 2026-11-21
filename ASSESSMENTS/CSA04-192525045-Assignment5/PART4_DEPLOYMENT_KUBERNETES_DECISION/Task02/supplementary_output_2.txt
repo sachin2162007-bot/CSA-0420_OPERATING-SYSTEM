@@ -1,0 +1,25 @@
+##### SUPPLEMENTARY 2 (clean rerun): fresh Deployment, CPU request 100m instead of 250m (test-only deviation), scale 3 -> 6 under load
+deployment.apps/result-portal created
+deployment "result-portal" successfully rolled out
+07:07:32
+deployment.apps/result-portal scaled
+result-portal   3/6   6     3     5s
+result-portal   5/6   6     5     8s
+result-portal   5/6   6     5     11s
+result-portal   5/6   6     5     14s
+result-portal   6/6   6     6     17s
+result-portal   6/6   6     6     21s
+Complete requests:      0
+Failed requests:        90122525
+result-portal-5b8bbc8df9-8bkwq 1/1 Running
+result-portal-5b8bbc8df9-f5f5d 1/1 Running
+result-portal-5b8bbc8df9-gsql6 1/1 Running
+result-portal-5b8bbc8df9-kwk6n 1/1 Running
+result-portal-5b8bbc8df9-ttrlk 0/1 Running
+result-portal-5b8bbc8df9-zmgzr 1/1 Running
+  cpu                800m (80%)    3 (300%)
+
+##### restore the official manifest (250m request)
+deployment.apps/result-portal created
+deployment "result-portal" successfully rolled out
+result-portal   3/3   3     3     3s

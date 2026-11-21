@@ -1,0 +1,25 @@
+# /etc/systemd/system/portal.service
+[Unit]
+Description=University Result Portal (Gunicorn)
+After=network.target
+
+[Service]
+User=portal
+Group=portal
+WorkingDirectory=/srv/portal
+ExecStart=/srv/portal/venv/bin/gunicorn --workers 2 --bind 127.0.0.1:8000 --no-control-socket --access-logfile /var/log/portal/access.log --error-logfile /var/log/portal/error.log app:app
+Restart=on-failure
+RestartSec=3
+# resource limits (cgroups) and hardening, as designed in Part A (A2.1)
+MemoryMax=512M
+CPUWeight=200
+LimitNOFILE=65535
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+# --no-control-socket in ExecStart: otherwise gunicorn writes /srv/portal/.gunicorn, which is read-only under ProtectSystem=strict
+ReadWritePaths=/var/log/portal
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

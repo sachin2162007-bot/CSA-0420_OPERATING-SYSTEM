@@ -1,0 +1,9 @@
+Expected (from the assignment, page 49):
+  kubectl get pods            -> 3 pods in Running state
+  kubectl delete pod <name>   -> a new pod is created automatically
+  kubectl describe pod        -> shows the requests and limits that were set
+
+Observed (see actual_output.txt):
+  3/3 Running; deleted pod replaced, new pod Running after ~3 s; describe shows
+  Limits cpu 500m / memory 512Mi, Requests cpu 250m / memory 256Mi.
+  Difference: scaling to 6 on a 1-CPU node left 3 pods Pending (Insufficient cpu).

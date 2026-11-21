@@ -1,0 +1,14 @@
+# Identical copy of the Service document that is already inside deployment.yaml (the official file
+# holds both objects). Kept separately only because the deliverable list names a service.yaml.
+# You do not need to apply it; `kubectl apply -f deployment.yaml` creates the Service.
+apiVersion: v1
+kind: Service
+metadata:
+  name: result-portal
+spec:
+  type: LoadBalancer
+  selector:
+    app: result-portal
+  ports:
+  - port: 80
+    targetPort: 8000

@@ -1,0 +1,17 @@
+# Multi-stage variant (B2 image reduction). Builds wheels in a throw-away stage, installs
+# them offline in the final slim stage, so build tools and pip caches never reach the final image.
+FROM python:3.12-slim AS builder
+WORKDIR /build
+COPY requirements.txt .
+RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements.txt
+
+FROM python:3.12-slim
+WORKDIR /app
+COPY --from=builder /wheels /wheels
+COPY requirements.txt .
+RUN pip install --no-cache-dir --no-index --find-links=/wheels -r requirements.txt && rm -rf /wheels
+RUN useradd --create-home --shell /usr/sbin/nologin portal
+COPY --chown=portal:portal . .
+USER portal
+EXPOSE 8000
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]

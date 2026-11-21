@@ -1,0 +1,41 @@
+##### SUPPLEMENTARY 1: load through the Service ClusterIP, 3 replicas (official yaml, 3 Running)
+result-portal   3/3   3     3     68s
+ClusterIP=10.43.3.77
+Failed requests:        0
+Requests per second:    2521.11 [#/sec] (mean)
+  95%     43
+Failed requests:        0
+Requests per second:    2557.89 [#/sec] (mean)
+  95%     44
+Failed requests:        0
+Requests per second:    2585.27 [#/sec] (mean)
+  95%     47
+
+##### SUPPLEMENTARY 2: scale to 6 under load with requests lowered to 100m CPU (deviation from the official 250m, test only)
+error: timed out waiting for the condition
+Waiting for deployment "result-portal" rollout to finish: 1 out of 3 new replicas have been updated...
+07:06:59
+deployment.apps/result-portal scaled
+result-portal   3/6   2     3     3m18s
+result-portal   3/6   3     3     3m21s
+result-portal   3/6   3     3     3m24s
+result-portal   3/6   3     3     3m27s
+result-portal   3/6   3     3     3m30s
+result-portal   3/6   3     3     3m34s
+Complete requests:      50000
+Failed requests:        0
+Requests per second:    2311.24 [#/sec] (mean)
+result-portal-5b8bbc8df9-dnt5q 0/1 Pending
+result-portal-5b8bbc8df9-r26l8 0/1 Pending
+result-portal-5b8bbc8df9-x72jz 0/1 Pending
+result-portal-86c9577d7f-c9ktv 0/1 Pending
+result-portal-86c9577d7f-jrx7n 1/1 Running
+result-portal-86c9577d7f-vp42h 1/1 Running
+result-portal-86c9577d7f-vxdkh 0/1 Pending
+result-portal-86c9577d7f-zbst6 1/1 Running
+
+##### restore the official manifest
+deployment.apps/result-portal configured
+service/result-portal unchanged
+deployment "result-portal" successfully rolled out
+result-portal   3/3   3     3     3m38s

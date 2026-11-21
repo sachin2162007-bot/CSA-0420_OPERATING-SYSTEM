@@ -1,0 +1,13 @@
+# Keep the build context small and keep secrets/evidence out of the image
+.git
+.gitignore
+__pycache__/
+*.pyc
+.venv/
+*.md
+expected_output.txt
+docker-compose.yml
+Dockerfile*
+database/
+capture_evidence.sh
+evidence_actual/
